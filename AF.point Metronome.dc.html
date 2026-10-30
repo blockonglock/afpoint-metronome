@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14110d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="AF.point">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" type="image/png" href="./icon-192.png">
+<script>
+// Serve the runtime's libraries from ./vendor so the app works offline.
+window.__resources={
+  "https://unpkg.com/react@18.3.1/umd/react.production.min.js":"./vendor/react.production.min.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"./vendor/react-dom.production.min.js",
+  "https://unpkg.com/@babel/standalone@7.29.0/babel.min.js":"./vendor/babel.min.js"
+};
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Unbounded:wght@500;700&family=Golos+Text:wght@500;700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+body{margin:0;--ui:'Rubik',system-ui,sans-serif;--px:'Press Start 2P',monospace;font-synthesis:none;background:#14110d;--bg:#14110d;--surface:#1d1913;--surface2:#28221a;--ink:#ecdfc4;--ink2:#a3957c;--staff:#5c5141;--accent:#ffb340;--accentInk:#1a1208;--R:#9bd87a;--L:#7cb4ff;--rest:#5a4f40;--shadow:#000;--glow:rgba(255,179,64,.55);--band:rgba(255,179,64,.16)}
+*{box-sizing:border-box}
+a{color:#ffb340}a:hover{color:#ecdfc4}
+input[type=range]{-webkit-appearance:none;appearance:none;margin:0}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@keyframes gapflash{from{opacity:1}to{opacity:0}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="min-height:100vh;height:{{ L.rootH }};overflow:{{ L.rootOv }};background:var(--bg);color:var(--ink);font-family:var(--ui);display:flex;justify-content:center;align-items:flex-start;padding:{{ L.rootPad }}">
+<div ref="{{ frameRef }}" style="position:relative;flex:none;width:{{ L.frameW }};height:{{ L.frameH }};border:{{ L.frameBorder }};box-shadow:{{ L.frameShadow }};transform:{{ L.frameTf }};overflow:{{ L.frameOv }};background:var(--bg)">
+<div ref="{{ fitRef }}" style="height:{{ L.scrollH }};overflow-y:{{ L.scrollOv }};overflow-x:hidden;width:{{ L.fitW }};transform:{{ L.fitTf }};transform-origin:top left">
+
+<header style="max-width:{{ L.maxW }};margin:0 auto;display:flex;align-items:center;gap:14px;padding:{{ L.headPad }}">
+  <div style="display:flex;align-items:center;gap:12px;min-width:0">
+    <div style="display:flex;gap:3px;align-items:flex-end">
+      <span style="width:8px;height:20px;background:var(--accent);box-shadow:0 0 10px var(--glow)"></span>
+      <span style="width:8px;height:12px;background:var(--ink)"></span>
+      <span style="width:8px;height:12px;background:var(--ink)"></span>
+      <span style="width:8px;height:12px;background:var(--ink)"></span>
+    </div>
+    <div style="font-family:var(--px);font-size:20px;white-space:nowrap">AF<span style="color:var(--accent)">.</span>point</div>
+    <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+      <div style="font-family:VT323,monospace;font-size:20px;color:var(--ink2);border:2px solid var(--ink2);padding:0 8px;line-height:24px;letter-spacing:.1em">METRONOME</div>
+    </sc-if>
+  </div>
+  <div style="flex:1"></div>
+  <div style="display:flex;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--shadow)">
+    <sc-for list="{{ themeBtns }}" as="t" hint-placeholder-count="2">
+      <button onClick="{{ t.click }}" style="min-width:64px;height:40px;padding:0 12px;border:0;background:{{ t.bg }};color:{{ t.fg }};font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.1em;cursor:pointer">{{ t.label }}</button>
+    </sc-for>
+  </div>
+  <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+    <button onClick="{{ openGap }}" title="Gap Click [G]" style="display:flex;align-items:center;gap:10px;height:46px;padding:0 16px;border:3px solid var(--ink);background:{{ gapBtnBg }};color:{{ gapBtnFg }};font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.1em;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)">
+      <span style="display:flex;gap:2px;align-items:center"><span style="width:4px;height:12px;background:currentColor"></span><span style="width:4px;height:12px;background:currentColor"></span><span style="width:8px;height:2px;background:currentColor;opacity:.6"></span><span style="width:4px;height:12px;background:currentColor"></span></span>
+      ГЭП
+    </button>
+  </sc-if>
+  <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+    <button onClick="{{ openSound }}" style="display:flex;align-items:center;gap:10px;height:46px;padding:0 16px;border:3px solid var(--ink);background:{{ soundBtnBg }};color:{{ soundBtnFg }};font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.1em;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)">
+      <span style="display:flex;gap:2px;align-items:flex-end"><span style="width:4px;height:6px;background:currentColor"></span><span style="width:4px;height:10px;background:currentColor"></span><span style="width:4px;height:14px;background:currentColor"></span></span>
+      ЗВУК
+    </button>
+  </sc-if>
+</header>
+
+<main style="max-width:{{ L.maxW }};margin:0 auto;padding:{{ L.mainPad }};display:flex;flex-direction:column;gap:{{ L.gap }}">
+
+  <div style="display:grid;grid-template-columns:{{ L.topCols }};gap:{{ L.gap }};align-items:stretch">
+
+    <section data-screen-label="Транспорт" style="border:3px solid var(--ink);background:var(--surface);box-shadow:6px 6px 0 var(--shadow);min-width:0">
+      <div style="display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;background:{{ tHeadBg }};color:{{ tHeadFg }}">
+        <span style="font-weight:700;font-size:15px;letter-spacing:.14em">ТРАНСПОРТ</span>
+        <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+        <span style="font-family:VT323,monospace;font-size:20px">{{ statusLabel }}</span>
+      </div>
+      <div style="padding:{{ L.boxPad }};display:flex;flex-direction:column;gap:{{ L.gap }}">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+          <div style="display:flex;align-items:flex-end;gap:14px;min-width:0">
+            <div style="font-family:VT323,monospace;font-size:{{ L.bpmSize }};line-height:.78;letter-spacing:-.02em;text-shadow:0 0 18px var(--glow);white-space:nowrap"><span style="color:var(--rest);text-shadow:none">{{ bpmLead }}</span>{{ bpmMain }}</div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding-bottom:6px">
+              <span style="font-family:var(--px);font-size:{{ L.bpmLabel }};color:var(--accent)">BPM</span>
+              <span style="font-family:VT323,monospace;font-size:20px;color:var(--ink2)">20–300</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;flex:none">
+            <div style="filter:drop-shadow(5px 5px 0 var(--shadow)) drop-shadow(0 0 {{ playGlow }} var(--glow))">
+              <button onClick="{{ toggle }}" aria-label="Старт / стоп" style="width:{{ L.playSize }};height:{{ L.playSize }};border:0;cursor:pointer;background:var(--accent);color:var(--accentInk);display:flex;align-items:center;justify-content:center;clip-path:polygon(30% 0,70% 0,70% 10%,80% 10%,80% 20%,90% 20%,90% 30%,100% 30%,100% 70%,90% 70%,90% 80%,80% 80%,80% 90%,70% 90%,70% 100%,30% 100%,30% 90%,20% 90%,20% 80%,10% 80%,10% 70%,0 70%,0 30%,10% 30%,10% 20%,20% 20%,20% 10%,30% 10%)">
+                <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}">
+                  <span style="width:34%;height:34%;background:currentColor"></span>
+                </sc-if>
+                <sc-if value="{{ notPlaying }}" hint-placeholder-val="{{ true }}">
+                  <span style="width:34%;height:40%;margin-left:8%;background:currentColor;clip-path:polygon(0 0,20% 0,20% 10%,40% 10%,40% 20%,60% 20%,60% 30%,80% 30%,80% 40%,100% 40%,100% 60%,80% 60%,80% 70%,60% 70%,60% 80%,40% 80%,40% 90%,20% 90%,20% 100%,0 100%)"></span>
+                </sc-if>
+              </button>
+            </div>
+            <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+              <span style="font-family:VT323,monospace;font-size:20px;color:var(--ink2);letter-spacing:.08em">[SPACE]</span>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <sc-for list="{{ nudges }}" as="b" hint-placeholder-count="4">
+            <button onClick="{{ b.click }}" style="flex:1 1 0;min-width:56px;height:52px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:VT323,monospace;font-size:28px;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)" style-active="transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)">{{ b.label }}</button>
+          </sc-for>
+          <button onClick="{{ tap }}" style="flex:1.4 1 0;min-width:80px;height:52px;border:3px solid var(--accent);background:{{ tapBg }};color:{{ tapFg }};font-family:var(--px);font-size:14px;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)">TAP <span style="font-family:VT323,monospace;font-size:20px;opacity:.7">[T]</span></button>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="position:relative;height:44px">
+            <div style="position:absolute;left:0;right:0;top:10px;height:24px;border:3px solid var(--ink);background:var(--surface2);overflow:hidden">
+              <div style="height:100%;width:{{ pct }}%;background:repeating-linear-gradient(90deg,var(--ink) 0 8px,transparent 8px 12px)"></div>
+            </div>
+            <div style="position:absolute;top:0;left:calc({{ pct }}% - 11px);width:22px;height:44px;background:var(--accent);border:3px solid var(--ink);box-shadow:0 0 12px var(--glow);pointer-events:none"></div>
+            <input type="range" min="20" max="300" step="1" value="{{ bpm }}" onChange="{{ onBpm }}" aria-label="Темп" style="position:absolute;inset:0;width:100%;height:44px;opacity:0;cursor:pointer">
+          </div>
+          <div style="display:flex;justify-content:space-between;font-family:VT323,monospace;font-size:18px;color:var(--ink2)">
+            <sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="8"><span>{{ tk }}</span></sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:{{ L.dotGap }}">
+          <sc-for list="{{ beats }}" as="d" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div style="filter:{{ d.filter }}">
+                <div style="width:{{ d.size }}px;height:{{ d.size }}px;background:{{ d.ring }};padding:{{ d.inset }}px;clip-path:polygon(30% 0,70% 0,70% 10%,80% 10%,80% 20%,90% 20%,90% 30%,100% 30%,100% 70%,90% 70%,90% 80%,80% 80%,80% 90%,70% 90%,70% 100%,30% 100%,30% 90%,20% 90%,20% 80%,10% 80%,10% 70%,0 70%,0 30%,10% 30%,10% 20%,20% 20%,20% 10%,30% 10%)">
+                  <div style="width:100%;height:100%;background:{{ d.fill }};display:flex;align-items:center;justify-content:center;clip-path:polygon(30% 0,70% 0,70% 10%,80% 10%,80% 20%,90% 20%,90% 30%,100% 30%,100% 70%,90% 70%,90% 80%,80% 80%,80% 90%,70% 90%,70% 100%,30% 100%,30% 90%,20% 90%,20% 80%,10% 80%,10% 70%,0 70%,0 30%,10% 30%,10% 20%,20% 20%,20% 10%,30% 10%)">
+                    <sc-if value="{{ d.first }}"><span style="width:30%;height:30%;background:{{ d.core }}"></span></sc-if>
+                  </div>
+                </div>
+              </div>
+              <span style="font-family:VT323,monospace;font-size:18px;color:{{ d.numColor }}">{{ d.n }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:{{ L.gap }};min-width:0">
+      <section data-screen-label="Размер" style="border:3px solid var(--ink);background:var(--surface);box-shadow:6px 6px 0 var(--shadow)">
+        <div style="display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;background:var(--ink);color:var(--surface)">
+          <span style="font-weight:700;font-size:15px;letter-spacing:.14em">РАЗМЕР</span>
+          <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+          <span style="font-family:VT323,monospace;font-size:20px">{{ sigLabel }}</span>
+        </div>
+        <div style="padding:{{ L.boxPad }};display:flex;flex-direction:column;gap:12px">
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+            <sc-for list="{{ sigs }}" as="c" hint-placeholder-count="9">
+              <button onClick="{{ c.click }}" style="height:46px;border:3px solid var(--ink);background:{{ c.bg }};color:{{ c.fg }};font-family:VT323,monospace;font-size:26px;cursor:pointer;padding:0">{{ c.label }}</button>
+            </sc-for>
+            <button onClick="{{ pickCustom }}" style="height:46px;border:3px solid var(--ink);background:{{ customBg }};color:{{ customFg }};font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.08em;cursor:pointer;padding:0">СВОЙ</button>
+          </div>
+          <sc-if value="{{ isCustom }}">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span style="font-size:14px;color:var(--ink2)">Свой размер</span>
+            <input type="number" min="1" max="16" value="{{ cNum }}" onChange="{{ onCNum }}" aria-label="Доли" style="width:64px;height:46px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:VT323,monospace;font-size:28px;text-align:center">
+            <span style="font-family:VT323,monospace;font-size:30px;color:var(--ink2)">/</span>
+            <input type="number" min="4" max="16" step="4" value="{{ cDen }}" onChange="{{ onCDen }}" aria-label="Длительность" style="width:64px;height:46px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:VT323,monospace;font-size:28px;text-align:center">
+          </div>
+          </sc-if>
+        </div>
+      </section>
+
+      <section data-screen-label="Сабдивизия" style="flex:1;border:3px solid var(--ink);background:var(--surface);box-shadow:6px 6px 0 var(--shadow)">
+        <div style="display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;background:var(--ink);color:var(--surface)">
+          <span style="font-weight:700;font-size:15px;letter-spacing:.14em">САБДИВИЗИЯ</span>
+          <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+          <span style="font-family:VT323,monospace;font-size:20px">[1–8]</span>
+        </div>
+        <div style="padding:{{ L.boxPad }};display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+          <sc-for list="{{ subs }}" as="c" hint-placeholder-count="8">
+            <button onClick="{{ c.click }}" title="{{ c.full }}" style="position:relative;height:{{ L.subH }};border:3px solid var(--ink);background:{{ c.bg }};color:{{ c.fg }};font-family:inherit;cursor:pointer;padding:6px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:0">
+              {{ c.icon }}
+              <span style="font-size:{{ L.subFont }};font-weight:500;line-height:1.1;text-align:center;overflow-wrap:anywhere;hyphens:auto;max-width:100%">{{ c.label }}</span>
+              <span style="position:absolute;top:1px;left:4px;font-family:VT323,monospace;font-size:16px;opacity:.6">{{ c.n }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section data-screen-label="Нотация и шаги" style="border:3px solid var(--ink);background:var(--surface);box-shadow:6px 6px 0 var(--shadow);min-width:0">
+    <div style="display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;background:var(--ink);color:var(--surface)">
+      <span style="font-weight:700;font-size:15px;letter-spacing:.14em;white-space:nowrap">ТАКТ</span>
+      <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+      <span style="font-family:VT323,monospace;font-size:20px;white-space:nowrap">{{ measureInfo }}</span>
+    </div>
+    <div style="padding:{{ L.boxPad }};display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+        <sc-for list="{{ actions }}" as="a" hint-placeholder-count="4">
+          <button onClick="{{ a.click }}" style="height:44px;padding:0 14px;border:2px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 0 var(--shadow);white-space:nowrap" style-active="transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)">{{ a.label }}</button>
+        </sc-for>
+        <sc-for list="{{ switches }}" as="x" hint-placeholder-count="2">
+          <button onClick="{{ x.toggle }}" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 4px;background:none;border:0;color:var(--ink);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">
+            <span style="position:relative;flex:none;width:52px;height:28px;border:3px solid var(--ink);background:{{ x.track }}"><span style="position:absolute;top:2px;left:{{ x.knob }}px;width:18px;height:18px;background:{{ x.knobBg }};transition:left .12s steps(3)"></span></span>
+            <span>{{ x.label }}</span>
+          </button>
+        </sc-for>
+        <div style="flex:1"></div>
+        <sc-if value="{{ hasRud }}">
+          <span style="height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--accent);color:var(--accentInk);font-weight:700;font-size:14px;white-space:nowrap">◆ {{ rudName }}</span>
+        </sc-if>
+        <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ openDrawer }}" style="height:44px;padding:0 16px;border:3px solid var(--ink);background:var(--ink);color:var(--surface);font-family:inherit;font-size:14px;font-weight:700;letter-spacing:.1em;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)">РУДИМЕНТЫ ▸</button>
+        </sc-if>
+      </div>
+
+      <div ref="{{ notaRef }}" style="overflow-x:auto;overflow-y:hidden;padding-bottom:8px">
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <sc-for list="{{ rows }}" as="row" hint-placeholder-count="1">
+            <div style="position:relative;min-width:{{ row.minW }}px;max-width:{{ row.maxW }}px">
+              <sc-if value="{{ row.hasCur }}">
+                <div style="position:absolute;top:0;bottom:-4px;left:{{ row.curLeft }}%;width:{{ row.curW }}%;background:var(--band);box-shadow:0 0 28px 4px var(--glow);border-left:2px solid var(--accent);border-right:2px solid var(--accent);transition:{{ curTrans }};pointer-events:none"></div>
+              </sc-if>
+              <div style="height:{{ row.svgH }};display:flex;flex-direction:column;justify-content:center">{{ row.svg }}</div>
+              <div style="position:relative;height:124px">
+                <div style="position:absolute;left:0;top:18px;width:{{ row.gutterW }}%;font-size:12px;color:var(--ink2);letter-spacing:.1em;padding-left:4px">ШАГ</div>
+                <div style="position:absolute;left:0;top:86px;width:{{ row.gutterW }}%;font-size:12px;color:var(--ink2);letter-spacing:.1em;padding-left:4px">РУКА</div>
+                <sc-for list="{{ row.groups }}" as="g">
+                  <div style="position:absolute;top:-6px;bottom:0;left:{{ g.left }}%;width:{{ g.width }}%;background:var(--surface2);border-top:2px solid var(--staff)"></div>
+                </sc-for>
+                <sc-for list="{{ row.pads }}" as="p">
+                  <div style="position:absolute;top:2px;left:{{ p.left }}%;width:{{ p.width }}%;padding:0 3px;display:flex;flex-direction:column;gap:8px">
+                    <button onClick="{{ p.toggle }}" onContextMenu="{{ p.ctx }}" onPointerDown="{{ p.down }}" onPointerUp="{{ p.up }}" onPointerLeave="{{ p.up }}" title="{{ p.title }}" style="position:relative;height:{{ p.h }}px;margin-top:{{ p.m }}px;margin-bottom:{{ p.m }}px;border:3px {{ p.bs }} {{ p.bc }};background:{{ p.bg }};color:{{ p.fg }};box-shadow:{{ p.sh }};font-family:VT323,monospace;font-size:34px;line-height:1;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;touch-action:manipulation;user-select:none">
+                      {{ p.glyph }}
+                      <sc-if value="{{ p.hasOrn }}">
+                        <span style="position:absolute;top:2px;right:2px;padding:0 3px;background:var(--surface);color:var(--ink);border:1px solid var(--ink);font-family:VT323,monospace;font-size:14px;line-height:14px">{{ p.ornTag }}</span>
+                      </sc-if>
+                    </button>
+                    <button onClick="{{ p.flip }}" style="height:44px;border:2px solid {{ p.hc }};background:transparent;color:{{ p.hc }};opacity:{{ p.ho }};font-family:var(--px);font-size:14px;cursor:pointer;padding:0">{{ p.hand }}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--ink2);display:flex;flex-wrap:wrap;gap:6px 18px">
+        <span>Клик по ноте или пэду — нота → акцент → пауза</span>
+        <span>ПКМ / долгое нажатие — орнамент</span>
+        <span style="color:var(--R)">R — правая</span>
+        <span style="color:var(--L)">L — левая</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+  <footer style="max-width:{{ L.maxW }};margin:0 auto;padding:0 24px 16px">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;padding:10px 16px;background:var(--ink);color:var(--surface);font-size:14px">
+      <span style="font-weight:700;letter-spacing:.14em">ХОТКЕИ</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">SPACE</span>старт / стоп</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">↑↓</span>темп ±1</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">SHIFT ↑↓</span>±5</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">T</span>tap</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">1–8</span>сабдивизия</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">ESC</span>закрыть панели</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">G</span>gap click</span>
+    </div>
+  </footer>
+</sc-if>
+<sc-if value="{{ L.mob }}"><div style="height:calc(84px + env(safe-area-inset-bottom))"></div></sc-if>
+</div>
+
+<sc-if value="{{ L.mob }}">
+  <nav style="position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:10px;padding:10px 12px calc(14px + env(safe-area-inset-bottom));background:var(--surface);border-top:3px solid var(--ink)">
+    <button onClick="{{ openDrawer }}" style="flex:1;height:52px;border:3px solid var(--ink);background:var(--ink);color:var(--surface);font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.1em;cursor:pointer">РУДИМЕНТЫ</button>
+    <button onClick="{{ openSound }}" style="flex:1;height:52px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.1em;cursor:pointer">ЗВУК</button>
+    <button onClick="{{ openGap }}" style="flex:1;height:52px;border:3px solid var(--ink);background:{{ gapBtnBg }};color:{{ gapBtnFg }};font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.1em;cursor:pointer">ГЭП</button>
+  </nav>
+</sc-if>
+
+<sc-if value="{{ anyPanel }}">
+  <div onClick="{{ closeAll }}" style="position:fixed;inset:0;z-index:50;background-image:conic-gradient(var(--shadow) 25%,transparent 0 50%,var(--shadow) 0 75%,transparent 0);background-size:4px 4px;opacity:.6"></div>
+</sc-if>
+
+<sc-if value="{{ drawer }}">
+  <aside data-screen-label="Рудименты" style="padding-bottom:env(safe-area-inset-bottom);position:fixed;z-index:60;top:{{ L.dTop }};right:0;bottom:0;left:{{ L.dLeft }};width:{{ L.dW }};display:flex;flex-direction:column;background:var(--surface);border:3px solid var(--ink);box-shadow:-6px 6px 0 var(--shadow)">
+    <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 6px 0 12px;background:var(--ink);color:var(--surface);flex:none">
+      <span style="font-weight:700;font-size:15px;letter-spacing:.14em;white-space:nowrap">РУДИМЕНТЫ · PAS 40</span>
+      <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+      <button onClick="{{ closeAll }}" aria-label="Закрыть" style="width:34px;height:34px;border:2px solid var(--surface);background:var(--ink);color:var(--surface);font-family:VT323,monospace;font-size:24px;cursor:pointer;padding:0">X</button>
+    </div>
+    <div style="padding:14px;display:flex;flex-direction:column;gap:12px;border-bottom:3px solid var(--ink);flex:none">
+      <div style="display:flex;align-items:center;height:48px;border:3px solid var(--ink);background:var(--surface2)">
+        <span style="font-family:VT323,monospace;font-size:24px;padding:0 10px;color:var(--ink2)">&gt;_</span>
+        <input type="text" value="{{ search }}" onChange="{{ onSearch }}" placeholder="Поиск: paradiddle, flam, RRL…" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--ink);font-family:inherit;font-size:16px;outline:none">
+        <span style="font-family:VT323,monospace;font-size:20px;padding:0 10px;color:var(--ink2)">{{ foundCount }}</span>
+      </div>
+      <button onClick="{{ toggleNative }}" style="display:flex;align-items:center;gap:12px;min-height:44px;background:none;border:0;color:var(--ink);font-family:inherit;font-size:14px;cursor:pointer;padding:0;text-align:left">
+        <span style="position:relative;flex:none;width:52px;height:28px;border:3px solid var(--ink);background:{{ native.track }}"><span style="position:absolute;top:2px;left:{{ native.knob }}px;width:18px;height:18px;background:{{ native.knobBg }};transition:left .12s steps(3)"></span></span>
+        <span>Переключить на родную сабдивизию рудимента</span>
+      </button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:18px">
+      <sc-for list="{{ rudGroups }}" as="g" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">
+            <span>{{ g.name }}</span><span style="flex:1;height:2px;background:var(--staff)"></span><span style="font-family:VT323,monospace;font-size:18px">{{ g.count }}</span>
+          </div>
+          <sc-for list="{{ g.items }}" as="r">
+            <button onClick="{{ r.pick }}" style="display:flex;flex-direction:column;gap:8px;padding:10px 12px;border:3px solid {{ r.bc }};background:{{ r.bg }};color:var(--ink);font-family:inherit;text-align:left;cursor:pointer;box-shadow:{{ r.sh }}">
+              <span style="display:flex;align-items:baseline;gap:10px;width:100%">
+                <span style="font-family:VT323,monospace;font-size:18px;color:var(--ink2)">{{ r.num }}</span>
+                <span style="flex:1;font-weight:700;font-size:15px">{{ r.name }}</span>
+                <span style="font-family:VT323,monospace;font-size:18px;padding:0 6px;border:2px solid var(--ink2);color:var(--ink2);white-space:nowrap">{{ r.sub }}</span>
+              </span>
+              <span style="display:flex;flex-wrap:wrap;gap:3px">
+                <sc-for list="{{ r.toks }}" as="t">
+                  <span style="display:flex;align-items:center;justify-content:center;min-width:20px;height:24px;padding:0 3px;background:{{ t.bg }};color:{{ t.fg }};font-family:var(--px);font-size:10px"><span style="font-family:VT323,monospace;font-size:14px;opacity:.8">{{ t.pre }}</span>{{ t.ch }}</span>
+                </sc-for>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ sound }}">
+  <aside data-screen-label="Звук" style="padding-bottom:env(safe-area-inset-bottom);position:fixed;z-index:60;top:{{ L.sTop }};right:{{ L.sRight }};bottom:{{ L.sBottom }};left:{{ L.sLeft }};width:{{ L.sW }};max-height:{{ L.sMaxH }};overflow-y:auto;background:var(--surface);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--shadow)">
+    <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 6px 0 12px;background:var(--ink);color:var(--surface)">
+      <span style="font-weight:700;font-size:15px;letter-spacing:.14em">ЗВУК</span>
+      <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+      <button onClick="{{ closeAll }}" aria-label="Закрыть" style="width:34px;height:34px;border:2px solid var(--surface);background:var(--ink);color:var(--surface);font-family:VT323,monospace;font-size:24px;cursor:pointer;padding:0">X</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:18px">
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">ТЕМБР</div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:-8px">
+        <sc-for list="{{ timbres }}" as="tb" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 6px 6px 0;border:3px solid var(--ink);background:{{ tb.bg }};color:{{ tb.fg }}">
+            <button onClick="{{ tb.pick }}" style="flex:1;min-width:0;min-height:44px;background:none;border:0;color:inherit;font-family:inherit;text-align:left;cursor:pointer;padding:0 0 0 10px;display:flex;flex-direction:column;justify-content:center">
+              <span style="font-weight:700;font-size:15px">{{ tb.name }}</span>
+              <span style="font-size:12px;opacity:.75">{{ tb.sub }}</span>
+            </button>
+            <button onClick="{{ tb.preview }}" aria-label="Прослушать" style="flex:none;width:44px;height:44px;border:2px solid currentColor;background:transparent;color:inherit;font-family:VT323,monospace;font-size:22px;cursor:pointer;padding:0">▶</button>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">ГРОМКОСТЬ</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:-8px">
+        <sc-for list="{{ vols }}" as="v" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;align-items:center;gap:10px">
+            <span style="font-size:14px">{{ v.label }}</span>
+            <div style="position:relative;height:44px;display:flex;align-items:center">
+              <div style="display:flex;gap:2px;width:100%;height:22px">
+                <sc-for list="{{ v.segs }}" as="s"><span style="flex:1;background:{{ s.c }}"></span></sc-for>
+              </div>
+              <input type="range" min="0" max="100" value="{{ v.val }}" onChange="{{ v.change }}" aria-label="{{ v.label }}" style="position:absolute;inset:0;width:100%;height:44px;opacity:0;cursor:pointer">
+            </div>
+            <span style="font-family:VT323,monospace;font-size:22px;text-align:right">{{ v.txt }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ gapPanel }}">
+  <aside data-screen-label="Гэп" style="padding-bottom:env(safe-area-inset-bottom);position:fixed;z-index:60;top:{{ L.sTop }};right:{{ L.sRight }};bottom:{{ L.sBottom }};left:{{ L.sLeft }};width:{{ L.sW }};max-height:{{ L.sMaxH }};overflow-y:auto;background:var(--surface);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--shadow)">
+    <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 6px 0 12px;background:var(--ink);color:var(--surface)">
+      <span style="font-weight:700;font-size:15px;letter-spacing:.14em">GAP CLICK</span>
+      <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+      <button onClick="{{ closeAll }}" aria-label="Закрыть" style="width:34px;height:34px;border:2px solid var(--surface);background:var(--ink);color:var(--surface);font-family:VT323,monospace;font-size:24px;cursor:pointer;padding:0">X</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:16px">
+      <button onClick="{{ gapSwitch.toggle }}" style="display:flex;align-items:center;gap:12px;min-height:44px;background:none;border:0;color:var(--ink);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;padding:0;text-align:left">
+        <span style="position:relative;flex:none;width:52px;height:28px;border:3px solid var(--ink);background:{{ gapSwitch.track }}"><span style="position:absolute;top:2px;left:{{ gapSwitch.knob }}px;width:18px;height:18px;background:{{ gapSwitch.knobBg }};transition:left .12s steps(3)"></span></span>
+        <span>{{ gapSwitch.label }}</span>
+      </button>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.45;margin-top:-6px">Клик играет несколько тактов, потом замолкает. Держи время сам: когда вернётся «раз», сразу слышно, уехал ли ты. Ноты и курсор в тишине идут дальше.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <sc-for list="{{ gapCounts }}" as="gc" hint-placeholder-count="2">
+          <div style="border:3px solid var(--ink);padding:8px 10px;display:flex;flex-direction:column;gap:4px;background:var(--surface2)">
+            <span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">{{ gc.label }}</span>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <button onClick="{{ gc.minus }}" aria-label="Меньше" style="width:40px;height:40px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);font-family:VT323,monospace;font-size:28px;cursor:pointer;padding:0">−</button>
+              <span style="font-family:VT323,monospace;font-size:40px;line-height:1">{{ gc.txt }}</span>
+              <button onClick="{{ gc.plus }}" aria-label="Больше" style="width:40px;height:40px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);font-family:VT323,monospace;font-size:28px;cursor:pointer;padding:0">+</button>
+            </div>
+            <span style="font-size:12px;color:var(--ink2);text-align:center">{{ gc.unit }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">РЕЖИМ</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:3px solid var(--ink);margin-top:-8px">
+        <sc-for list="{{ gapModes }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.click }}" style="height:40px;border:0;background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.08em;cursor:pointer;padding:0">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.4;margin-top:-8px">{{ gapModeHint }}</div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">В ТИШИНЕ</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:3px solid var(--ink);margin-top:-8px">
+        <sc-for list="{{ ghostOpts }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.click }}" style="height:40px;border:0;background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.08em;cursor:pointer;padding:0">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2);border-top:2px solid var(--staff);padding-top:14px">КЛИК НА</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:-8px">
+        <sc-for list="{{ clickModes }}" as="m" hint-placeholder-count="5">
+          <button onClick="{{ m.click }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:40px;padding:0 12px;border:2px solid var(--ink);background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left">
+            <span>{{ m.label }}</span><span style="font-family:VT323,monospace;font-size:18px;opacity:.75;white-space:nowrap">{{ m.hint }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ flash }}">
+  <div style="position:fixed;inset:0;z-index:85;pointer-events:none;box-shadow:inset 0 0 0 8px var(--accent),inset 0 0 120px var(--glow);animation:gapflash .38s steps(4,end) forwards"></div>
+</sc-if>
+
+<sc-if value="{{ hasOrn }}">
+  <div onClick="{{ closeOrn }}" onContextMenu="{{ closeOrnCtx }}" style="position:fixed;inset:0;z-index:65"></div>
+  <div style="position:fixed;z-index:70;left:{{ orn.x }}px;top:{{ orn.y }}px;width:220px;background:var(--surface);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--shadow)">
+    <div style="display:flex;align-items:center;gap:8px;height:32px;padding:0 10px;background:var(--ink);color:var(--surface)">
+      <span style="font-weight:700;font-size:13px;letter-spacing:.14em">ОРНАМЕНТ</span>
+      <span style="flex:1;height:10px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+      <span style="font-family:VT323,monospace;font-size:18px">#{{ orn.n }}</span>
+    </div>
+    <div style="display:flex;flex-direction:column;padding:4px">
+      <sc-for list="{{ orn.opts }}" as="o">
+        <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:12px;height:44px;padding:0 10px;border:0;background:{{ o.bg }};color:{{ o.fg }};font-family:inherit;font-size:15px;cursor:pointer;text-align:left">
+          <span style="width:30px;font-family:VT323,monospace;font-size:20px">{{ o.tag }}</span><span>{{ o.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ scan }}">
+  <div style="position:fixed;inset:0;z-index:90;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)"></div>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;scene&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;stopped&quot;,&quot;playing&quot;,&quot;paradiddle&quot;,&quot;drawer&quot;],&quot;default&quot;:&quot;stopped&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Состояние&quot;},&quot;mobilePreview&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Состояние&quot;},&quot;font&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rubik&quot;,&quot;unbounded&quot;,&quot;golos&quot;],&quot;default&quot;:&quot;rubik&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Вид&quot;},&quot;scanlines&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Вид&quot;},&quot;cursorMotion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;smooth&quot;,&quot;step&quot;],&quot;default&quot;:&quot;smooth&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Вид&quot;}}">
+const SUBS=[[1,'Четверти','1/4'],[2,'Восьмые','1/8'],[3,'Триоли','3-оли'],[4,'Шестнадцатые','1/16'],[5,'Квинтоли','5-оли'],[6,'Секстоли','6-оли'],[7,'Септоли','7-оли'],[8,'32-е','1/32']];
+const SIGS=['2/4','3/4','4/4','5/4','7/4','6/8','7/8','9/8','12/8'];
+const THEMES={
+ dark:{bg:'#14110d',surface:'#1d1913',surface2:'#28221a',ink:'#ecdfc4',ink2:'#a3957c',staff:'#5c5141',accent:'#ffb340',accentInk:'#1a1208',R:'#9bd87a',L:'#7cb4ff',rest:'#5a4f40',shadow:'#000000',glow:'rgba(255,179,64,.55)',band:'rgba(255,179,64,.16)'},
+ light:{bg:'#e6dcc5',surface:'#f6efdf',surface2:'#ebe2cd',ink:'#26252e',ink2:'#5f5a50',staff:'#a99e87',accent:'#cc6a1c',accentInk:'#1f1a14',R:'#3d7a35',L:'#2c5aa6',rest:'#b5a990',shadow:'#26252e',glow:'rgba(204,106,28,.35)',band:'rgba(204,106,28,.13)'}
+};
+const RUD=[
+{g:'РОЛЛЫ',items:[['Single Stroke Roll','R L R L',4],['Single Stroke Four','R L R L> - -',6],['Single Stroke Seven','R L R L R L R> -',8],['Multiple Bounce Roll','zR zL zR zL',4],['Triple Stroke Roll','R R R L L L',6],['Double Stroke Open Roll','R R L L',4],['Five Stroke Roll','2R 2L R> -',4],['Six Stroke Roll','R> 2L 2R L>',4],['Seven Stroke Roll','2R 2L 2R L>',4],['Nine Stroke Roll','2R 2L 2R 2L R> - - -',4],['Ten Stroke Roll','2R 2L 2R 2L R> L> - -',4],['Eleven Stroke Roll','2R 2L 2R 2L 2R L> - -',4],['Thirteen Stroke Roll','2R 2L 2R 2L 2R 2L R> -',4],['Fifteen Stroke Roll','2R 2L 2R 2L 2R 2L 2R L>',4],['Seventeen Stroke Roll','2R 2L 2R 2L 2R 2L 2R 2L R> - - - - - - -',4]]},
+{g:'ДИДЛЫ',items:[['Single Paradiddle','R> L R R L> R L L',4],['Double Paradiddle','R> L R L R R L> R L R L L',6],['Triple Paradiddle','R> L R L R L R R L> R L R L R L L',4],['Paradiddle-diddle','R> L R R L L',6]]},
+{g:'ФЛЭМЫ',items:[['Flam','fR> - fL> -',2],['Flam Accent','fR> L R fL> R L',3],['Flam Tap','fR R fL L',4],['Flamacue','fR L> R L fR - - -',4],['Flam Paradiddle','fR> L R R fL> R L L',4],['Single Flammed Mill','fR R L R fL L R L',4],['Flam Paradiddle-diddle','fR> L R R L L fL> R L L R R',6],['Pataflafla','fR L R fL',4],['Swiss Army Triplet','fR R L fR R L',3],['Inverted Flam Tap','fR L fL R',4],['Flam Drag','fR> dL R fL> dR L',3]]},
+{g:'ДРАГИ',items:[['Drag','dR> - dL> -',2],['Single Drag Tap','dR L> dL R>',2],['Double Drag Tap','dR dR L> dL dL R>',3],['Lesson 25','dR L R> dL R L>',3],['Single Dragadiddle','R> dR L R L> dL R L',4],['Drag Paradiddle #1','R> dL R L R R L> dR L R L L',6],['Drag Paradiddle #2','R> dL R> dL R L R R',4],['Single Ratamacue','dR L R L>',4],['Double Ratamacue','dR dR L R L> -',6],['Triple Ratamacue','dR dR dR L R L>',6]]},
+{g:'ПЕРЕСТАНОВКИ',items:[['RLR · LRL','R> L R L> R L',3],['RRL','R> R L',3],['RLL','R> L L',3],['LRR','L> R R',3],['LLR','L> L R',3],['RRLL','R> R L L',4],['RLRR','R> L R R',4],['RLLR','R> L L R',4],['RRLR','R> R L R',4],['LRRL','L> R R L',4]]}
+];
+const RLIST=[];RUD.forEach(g=>g.items.forEach(it=>RLIST.push({id:RLIST.length+1,g:g.g,name:it[0],pat:it[1],s:it[2]})));
+const ORN=[['none','—','Нет'],['flam','FL','Флэм'],['drag','DR','Драг'],['double','×2','Дабл‑строк'],['buzz','Z','Бас‑ролл']];
+const OM={f:'flam',d:'drag','2':'double',z:'buzz'};
+const BM={
+ head:['...XXXX','.XXXXXX','XXXXXXX','XXXXXX.','XXXX...'],
+ grace:['..XX','XXXX','XX..'],
+ acc:['XX....','..XX..','....XX','..XX..','XX....'],
+ flag:['X...','XX..','.XX.','..XX','...X'],
+ q:['.X...','..X..','..XX.','..XXX','.XXX.','XXX..','.XX..','..X..','...X.','..XX.','.XXX.','.X...','..X..'],
+ e8:['XX..X','XXXX.','...X.','..X..','..X..','.X...','.X...'],
+ s16:['...XX.X','...XXX.','.XX.X..','.XXX...','..X....','.X.....','.X.....','X......'],
+ t32:['....XX.X','....XXX.','..XX.X..','..XXX...','XX.X....','XXX.....','.X......','X.......'],
+ dbl:['...XX','.XXX.','XX...'],
+ buzz:['XXXX','..X.','.X..','XXXX'],
+ slash:['...X','..X.','.X..','X...']
+};
+function parseTok(t,i){if(t==='-')return{state:'r',hand:i%2?'L':'R',orn:'none'};let orn='none';if(OM[t[0]]){orn=OM[t[0]];t=t.slice(1)}return{state:t.includes('>')?'a':'n',hand:t[0],orn}}
+function defSteps(n){return Array.from({length:n},(_,i)=>({state:'n',hand:i%2?'L':'R',orn:'none'}))}
+const PIX='polygon(30% 0,70% 0,70% 10%,80% 10%,80% 20%,90% 20%,90% 30%,100% 30%,100% 70%,90% 70%,90% 80%,80% 80%,80% 90%,70% 90%,70% 100%,30% 100%,30% 90%,20% 90%,20% 80%,10% 80%,10% 70%,0 70%,0 30%,10% 30%,10% 20%,20% 20%,20% 10%,30% 10%)';
+
+class Component extends DCLogic {
+  state={theme:'dark',bpm:60,playing:false,demo:false,cur:-1,num:4,den:4,sigKey:'4/4',cNum:5,cDen:8,subdiv:3,steps:defSteps(12),rudiment:null,drawer:false,sound:false,search:'',nativeSub:true,timbre:'click',vol:{master:80,beat:85,sub:55,acc:100},accentFirst:true,onlyBeats:false,orn:null,w:1440,tapHot:false,fit:1,gap:{on:false,click:2,gap:2,mode:'fixed',ghost:0},clickMode:'pattern',gapPanel:false,sec:null,flash:false};
+  rootRef=React.createRef(); frameRef=React.createRef(); fitRef=React.createRef(); notaRef=React.createRef();
+  componentDidMount(){
+    this.applyScene(this.props.scene??'stopped'); this.applyVars();
+    if(window.ResizeObserver&&this.rootRef.current){this.ro=new ResizeObserver(en=>{const w=en[0].contentRect.width;cancelAnimationFrame(this.roF);this.roF=requestAnimationFrame(()=>{if(Math.abs(w-this.state.w)>4)this.setState({w})})});this.ro.observe(this.rootRef.current)}
+    if(window.ResizeObserver&&this.fitRef.current){this.fro=new ResizeObserver(()=>{cancelAnimationFrame(this.fitF);this.fitF=requestAnimationFrame(()=>this.fit())});this.fro.observe(this.fitRef.current)}
+    if(window.ResizeObserver&&this.notaRef.current){this.nro=new ResizeObserver(en=>{const nw=Math.round(en[0].target.clientWidth);if(Math.abs(nw-(this.state.nw||0))>2)this.setState({nw})});this.nro.observe(this.notaRef.current)}
+    this.onKey=e=>this.key(e); window.addEventListener('keydown',this.onKey);
+    this.onRs=()=>{const el=this.rootRef.current;const w=(el&&el.offsetWidth)||window.innerWidth;if(Math.abs(w-this.state.w)>4)this.setState({w});this.fit()};
+    this.onVis=()=>{if(document.visibilityState==='visible'&&this.state.playing)this.wake(true)}; document.addEventListener('visibilitychange',this.onVis);
+    window.addEventListener('resize',this.onRs); this.onRs(); setTimeout(this.onRs,300); setTimeout(()=>this.fit(),600);
+  }
+  componentDidUpdate(pp){ pp=pp||{}; if(pp.scene!==this.props.scene)this.applyScene(this.props.scene); if(this._vt!==this.state.theme||this._vf!==this.props.font){this._vt=this.state.theme;this._vf=this.props.font;this.applyVars()} }
+  componentWillUnmount(){ this.stopEngine(); this.wake(false); document.removeEventListener('visibilitychange',this.onVis); window.removeEventListener('keydown',this.onKey); window.removeEventListener('resize',this.onRs); this.ro&&this.ro.disconnect(); this.fro&&this.fro.disconnect(); this.nro&&this.nro.disconnect(); }
+  fit(){
+    const el=this.fitRef.current; if(!el||this.props.mobilePreview||this.state.w<760)return;
+    const h=el.offsetHeight; if(!h)return;
+    const z=Math.max(0.4,Math.min(1,Math.floor(window.innerHeight/h*1000)/1000));
+    if(Math.abs(z-this.state.fit)>0.003)this.setState({fit:z});
+  }
+  applyVars(){ const el=this.rootRef.current; if(!el)return; const t=THEMES[this.state.theme]; for(const k in t) el.style.setProperty('--'+k,t[k]); el.style.setProperty('--ui',({rubik:"'Rubik'",unbounded:"'Unbounded'",golos:"'Golos Text'"}[this.props.font??'rubik']||"'Rubik'")+',system-ui,sans-serif'); }
+  applyScene(sc){
+    this.stopEngine();
+    const b={theme:'dark',bpm:60,playing:false,demo:false,cur:-1,num:4,den:4,sigKey:'4/4',subdiv:3,steps:defSteps(12),rudiment:null,drawer:false,sound:false,search:'',orn:null};
+    if(sc==='playing'){const st=defSteps(12).map((x,i)=>i%3===0?{...x,state:'r'}:(i===1||i===7)?{...x,state:'a'}:x);st[4].orn='flam';st[11].orn='double';Object.assign(b,{bpm:72,steps:st,playing:true,demo:true,cur:7})}
+    if(sc==='paradiddle'){const r=RLIST.find(r=>r.name==='Single Paradiddle');Object.assign(b,{theme:'light',bpm:80,subdiv:4,steps:this.fill(r,16),rudiment:r.id})}
+    if(sc==='drawer'){b.drawer=true;b.search='para'}
+    this.setState(b);
+  }
+  fill(r,n){const t=r.pat.split(' ');return Array.from({length:n},(_,i)=>parseTok(t[i%t.length],i))}
+  // audio
+  ctxOk(){
+    if(!this.ctx){try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}const AC=window.AudioContext||window.webkitAudioContext;this.ctx=new AC();this.out=this.ctx.createGain();this.out.connect(this.ctx.destination);const len=Math.floor(this.ctx.sampleRate*0.3);this.noise=this.ctx.createBuffer(1,len,this.ctx.sampleRate);const d=this.noise.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1}
+    if(this.ctx.state!=='running')this.ctx.resume();
+    this.out.gain.value=this.state.vol.master/100; return this.ctx;
+  }
+  voice(t,g,lvl,timbre){
+    const c=this.ctx; if(!c||g<=0)return; if(t<c.currentTime)t=c.currentTime; const tb=timbre||this.state.timbre;
+    const env=c.createGain(); env.connect(this.out);
+    if(tb==='click'){const f=[1100,1500,2100][lvl];const o=c.createOscillator();o.type='sine';o.frequency.value=f;o.connect(env);env.gain.setValueAtTime(g,t);env.gain.exponentialRampToValueAtTime(0.001,t+0.03);o.start(t);o.stop(t+0.04);
+      const n=c.createBufferSource();n.buffer=this.noise;const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=3500;const ng=c.createGain();ng.gain.setValueAtTime(g*0.5,t);ng.gain.exponentialRampToValueAtTime(0.001,t+0.012);n.connect(hp);hp.connect(ng);ng.connect(this.out);n.start(t);n.stop(t+0.03)}
+    else if(tb==='woodblock'){const f=[700,860,1050][lvl];const o=c.createOscillator();o.type='triangle';o.frequency.setValueAtTime(f*1.25,t);o.frequency.exponentialRampToValueAtTime(f,t+0.02);const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=f;bp.Q.value=3;o.connect(bp);bp.connect(env);env.gain.setValueAtTime(g*1.6,t);env.gain.exponentialRampToValueAtTime(0.001,t+0.09);o.start(t);o.stop(t+0.1)}
+    else if(tb==='hihat'){const n=c.createBufferSource();n.buffer=this.noise;const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=lvl===2?6000:7500;n.connect(hp);hp.connect(env);const dec=[0.04,0.06,0.13][lvl];env.gain.setValueAtTime(g*0.9,t);env.gain.exponentialRampToValueAtTime(0.001,t+dec);n.start(t);n.stop(t+dec+0.02)}
+    else {const f=[660,880,1320][lvl];const o=c.createOscillator();o.type='square';o.frequency.value=f;o.connect(env);env.gain.setValueAtTime(g*0.25,t);env.gain.setValueAtTime(g*0.25,t+0.035);env.gain.exponentialRampToValueAtTime(0.001,t+0.07);o.start(t);o.stop(t+0.08)}
+  }
+  stopEngine(){ clearInterval(this.timer); cancelAnimationFrame(this.raf); this.timer=null; }
+  // Keep the phone screen on while the metronome plays.
+  wake(on){ try{ if(on){ if(navigator.wakeLock&&!this.wl)navigator.wakeLock.request('screen').then(l=>{this.wl=l;l.addEventListener('release',()=>{if(this.wl===l)this.wl=null})}).catch(()=>{}) } else if(this.wl){this.wl.release().catch(()=>{});this.wl=null} }catch(e){} }
+  toggle(){ if(this.state.playing){this.stopEngine();this.wake(false);this.setState({playing:false,demo:false,cur:-1,sec:null,flash:false})} else this.start(); }
+  start(){
+    const c=this.ctxOk(); this.stopEngine(); this.next=c.currentTime+0.1; this.si=0; this.q=[]; this.cyc=null; this.grow=0; this.curSec=null;
+    this.timer=setInterval(()=>this.sched(),25); this.sched();
+    const tick=()=>{const now=c.currentTime-(c.outputLatency||0)-(c.baseLatency||0);let it=null;while(this.q.length&&this.q[0].t<=now)it=this.q.shift();if(it){const u={};if(it.i!==this.state.cur)u.cur=it.i;const ps=this.state.sec;if(it.sec!==ps){u.sec=it.sec;if(ps&&it.sec&&ps.gap!==it.sec.gap){u.flash=true;clearTimeout(this.flT);this.flT=setTimeout(()=>this.setState({flash:false}),380)}}if(Object.keys(u).length)this.setState(u)}this.raf=requestAnimationFrame(tick)};
+    this.raf=requestAnimationFrame(tick); this.wake(true); this.setState({playing:true,demo:false,cur:-1});
+  }
+  sched(){ const c=this.ctx;const {bpm,subdiv:s,steps}=this.state;const d=60/bpm/s;
+    if(this.next<c.currentTime){const m=Math.ceil((c.currentTime-this.next)/d);this.next+=m*d;this.si=(this.si+m)%steps.length}
+    while(this.next<c.currentTime+0.12){const i=this.si%steps.length;if(i===0||!this.curSec)this.curSec=this.nextSection();this.playStep(i,this.next,d,this.curSec);this.q.push({i,t:this.next,sec:this.curSec});this.next+=d;this.si=(i+1)%steps.length} }
+  // Gap Click: bars alternate between a click phase and a silent (gap) phase.
+  nextSection(){
+    const g=this.state.gap; if(!g.on){this.cyc=null;return {gap:false,n:0,total:0}}
+    const rnd=n=>1+Math.floor(Math.random()*n);
+    let c=this.cyc;
+    if(!c||c.left<=0){
+      const phase=!c?'click':c.phase==='click'?'gap':'click';let len;
+      if(phase==='click')len=g.mode==='random'?rnd(g.click):g.click;
+      else if(g.mode==='random')len=rnd(g.gap);
+      else if(g.mode==='grow'){this.grow=(this.grow||0)>=g.gap?1:(this.grow||0)+1;len=this.grow}
+      else len=g.gap;
+      c=this.cyc={phase,len,left:len};
+    }
+    c.left--; return {gap:c.phase==='gap',n:c.len-c.left,total:c.len};
+  }
+  setGap(p){ this.setState(st=>({gap:{...st.gap,...p}})); this.cyc=null; this.grow=0; }
+  // Where the reference click sounds when it is not following the pattern.
+  clickHit(i,s){
+    const k=i%s,b=Math.floor(i/s),m=this.state.clickMode;
+    if(m==='beats')return k===0;
+    if(m==='offbeat')return s===1?k===0:k===(s%2===0?s/2:s-1);
+    if(m==='backbeat')return k===0&&b%2===1;
+    if(m==='last')return k===(s>1?s-1:0);
+    return false;
+  }
+  playStep(i,t,d,sec){
+    const {steps,subdiv:s,vol,accentFirst,gap,clickMode}=this.state;const st=steps[i];if(!st)return;const beat=i%s===0;
+    const mul=sec&&sec.gap&&gap.on?gap.ghost/100:1; if(mul<=0)return;
+    this.out.gain.value=vol.master/100;
+    if(clickMode!=='pattern'){if(this.clickHit(i,s)){const df=clickMode==='beats'&&accentFirst&&i===0;this.voice(t,(df?vol.acc:vol.beat)/100*0.9*mul,df?2:1)}return}
+    if(st.state==='r')return;
+    const acc=st.state==='a'||(accentFirst&&i===0);const lvl=acc?2:beat?1:0;const g=(acc?vol.acc:beat?vol.beat:vol.sub)/100*0.9*mul;
+    if(st.orn==='flam')this.voice(t-0.028,g*0.35,0);
+    if(st.orn==='drag'){this.voice(t-0.06,g*0.3,0);this.voice(t-0.035,g*0.3,0)}
+    this.voice(t,g,lvl);
+    if(st.orn==='double')this.voice(t+d/2,g*0.8,Math.min(lvl,1));
+    if(st.orn==='buzz')for(let k=1;k<5;k++)this.voice(t+k*d/5,g*(0.6-k*0.1),0);
+  }
+  // edits
+  setBpm(v){ this.setState({bpm:Math.max(20,Math.min(300,Math.round(v)))}); }
+  tap(){ const now=performance.now();const t=(this.taps||[]).filter(x=>now-x<2500);t.push(now);this.taps=t.slice(-6);if(this.taps.length>=2){const a=this.taps;this.setBpm(60000/((a[a.length-1]-a[0])/(a.length-1)))}this.setState({tapHot:true});clearTimeout(this.tapT);this.tapT=setTimeout(()=>this.setState({tapHot:false}),120); }
+  curRud(){ return this.state.rudiment&&RLIST.find(x=>x.id===this.state.rudiment); }
+  remap(s1,num){
+    if(!this.timer||!this.ctx)return; const {bpm,subdiv:s0}=this.state; const beat=60/bpm;
+    const b=Math.floor(this.si/s0),k0=this.si%s0,beatStart=this.next-k0*beat/s0;
+    let k1=Math.ceil(k0*s1/s0-1e-9),b1=b; if(k1>=s1){k1=0;b1=b+1}
+    this.next=beatStart+(b1-b)*beat+k1*beat/s1; this.si=(b1%num)*s1+k1;
+  }
+  reshape(num,den,s,extra){ this.remap(s,num); const r=this.curRud();const n=num*s;const steps=r?this.fill(r,n):Array.from({length:n},(_,i)=>this.state.steps[i]?{...this.state.steps[i]}:{state:'n',hand:i%2?'L':'R',orn:'none'});this.setState({num,den,subdiv:s,steps,...(extra||{})}); }
+  setSub(s){ this.reshape(this.state.num,this.state.den,s); }
+  setSig(k){ const [n,d]=k.split('/').map(Number); this.reshape(n,d,this.state.subdiv,{sigKey:k}); }
+  setCustom(n,d){ n=Math.max(1,Math.min(16,n||1)); d=d>=12?16:d>=6?8:4; this.reshape(n,d,this.state.subdiv,{sigKey:'custom',cNum:n,cDen:d}); }
+  editSteps(fn){ this.setState(s=>({steps:s.steps.map((x,i)=>fn({...x},i,s))})); }
+  cycle(i){ this.editSteps((x,j)=>{if(j===i)x.state=x.state==='n'?'a':x.state==='a'?'r':'n';return x}); }
+  flip(i){ this.editSteps((x,j)=>{if(j===i)x.hand=x.hand==='R'?'L':'R';return x}); }
+  openOrn(i,cx,cy){ const f=this.frameRef.current;const r=f?f.getBoundingClientRect():{left:0,top:0,width:window.innerWidth,height:window.innerHeight};const tf=this.isPreview();const ox=tf?r.left:0,oy=tf?r.top:0;const W=tf?r.width:window.innerWidth,H=tf?r.height:window.innerHeight;const x=Math.max(8,Math.min(cx-ox,W-232)),y=Math.max(8,Math.min(cy-oy+8,H-300));this.setState({orn:{i,x,y}}); }
+  padDown(i,e){ if(e.button===2)return;const x=e.clientX,y=e.clientY;this.lp=false;clearTimeout(this.lpT);this.lpT=setTimeout(()=>{this.lp=true;this.openOrn(i,x,y)},480); }
+  padClick(i){ if(this.lp){this.lp=false;return} this.cycle(i); }
+  key(e){
+    const tg=e.target&&e.target.tagName; if(tg==='INPUT'||tg==='TEXTAREA')return;
+    if(e.code==='Space'){e.preventDefault();this.toggle()}
+    else if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();this.setBpm(this.state.bpm+(e.shiftKey?5:1)*(e.key==='ArrowUp'?1:-1))}
+    else if(/^[tTеЕ]$/.test(e.key))this.tap();
+    else if(/^[1-8]$/.test(e.key))this.setSub(+e.key);
+    else if(/^[gGпП]$/.test(e.key))this.setGap({on:!this.state.gap.on});
+    else if(e.key==='Escape')this.setState({drawer:false,sound:false,gapPanel:false,orn:null});
+  }
+  isPreview(){ return !!this.props.mobilePreview; }
+  // notation
+  subIcon(s){
+    const e=React.createElement;const mobS=!!this.props.mobilePreview||this.state.w<760;const w=s*6+2;const b=s===1?0:s<=3?1:s<=7?2:3;const k=[];
+    for(let i=0;i<s;i++){const x=1+i*6;k.push(e('rect',{key:'h'+i,x,y:13,width:5,height:4}));k.push(e('rect',{key:'s'+i,x:x+4,y:2,width:1.2,height:12}))}
+    for(let l=0;l<b&&s>1;l++)k.push(e('rect',{key:'b'+l,x:5,y:2+l*2.6,width:(s-1)*6+1.2,height:1.6}));
+    return e('svg',{viewBox:`0 0 ${w} 18`,height:mobS?22:30,width:Math.round(w*(mobS?22:30)/18),fill:'currentColor',shapeRendering:'crispEdges',style:{display:'block'}},k);
+  }
+  buildRows(T,mob){
+    const {num,den,subdiv:s,steps,cur,playing,nw}=this.state;const e=React.createElement;
+    const BG=18,G=96,H=134,K=1.6;const total=num*s;let SW=40,rn=Math.max(1,Math.ceil(total/24));
+    if(!mob){rn=1;SW=Math.max(18,((nw||1600)/K-G-(num-1)*BG-20)/total)}
+    const bpr=Math.ceil(num/rn);const bw=s*SW;
+    const W=G+bpr*bw+(bpr-1)*BG+20;
+    const base=den===8?1:den===16?2:0;const sb=s===1?0:s<=3?1:s<=7?2:3;const beams=Math.min(4,base+sb);const tup=[3,5,6,7].includes(s);
+    const rows=[];
+    for(let r=0;r*bpr<num;r++){
+      const b0=r*bpr,nb=Math.min(bpr,num-b0),last=b0+nb>=num;const el=[];let k=0;
+      const R=(x,y,w,h,fill)=>el.push(e('rect',{key:k++,x,y,width:w,height:h,fill}));
+      const bm=(rws,x,y,px,fill)=>rws.forEach((row,ri)=>{let c=0;while(c<row.length){if(row[c]==='X'){let c1=c;while(c1<row.length&&row[c1]==='X')c1++;R(x+c*px,y+ri*px,(c1-c)*px+0.05,px+0.05,fill);c=c1}else c++}});
+      const end=G+nb*bw+(nb-1)*BG+8;
+      for(let i=0;i<5;i++)R(6,56+i*10,end-6,1.6,T.staff);
+      if(last){R(end-8,56,1.8,41.6,T.ink);R(end-3,56,4,41.6,T.ink)}else R(end-1,56,2,41.6,T.ink);
+      R(16,66,5,20,T.ink);R(25,66,5,20,T.ink);
+      if(r===0){el.push(e('text',{key:k++,x:62,y:75,textAnchor:'middle',fontFamily:'VT323,monospace',fontSize:30,fill:T.ink},String(num)));el.push(e('text',{key:k++,x:62,y:96,textAnchor:'middle',fontFamily:'VT323,monospace',fontSize:30,fill:T.ink},String(den)))}
+      const pads=[],groups=[];let curLeft=null;
+      for(let bl=0;bl<nb;bl++){
+        const b=b0+bl;const gx=G+bl*(bw+BG);groups.push({left:(gx-5)/W*100,width:(bw+10)/W*100});
+        const info=[];
+        for(let j=0;j<s;j++){const idx=b*s+j;const st=steps[idx]||{state:'n',hand:'R',orn:'none'};const x=gx+j*SW;const cx=x+SW/2+3;info.push({idx,st,cx,x,col:st.state==='a'?T.accent:T.ink,stemX:cx+4.5})}
+        info.forEach(n=>{
+          const st=n.st,col=n.col;
+          if(st.state==='r'){const rb=beams===0?BM.q:beams===1?BM.e8:beams===2?BM.s16:BM.t32;const w=rb[0].length*1.8,h=rb.length*1.8;bm(rb,n.cx-w/2,76-h/2,1.8,T.ink)}
+          else{
+            const top=beams?36:40;bm(BM.head,n.cx-6.3,66.5,1.8,col);R(n.stemX,top,1.8,70-top,col);
+            if(st.state==='a')bm(BM.acc,n.cx-5.4,20,1.8,T.accent);
+            const hl=n.cx-6.3;
+            if(st.orn==='flam'){const g=hl-11;bm(BM.grace,g,70,1.4,col);R(g+4.2,54,1.4,17,col);bm(BM.slash,g+1.4,57,1.4,col)}
+            if(st.orn==='drag'){const g1=hl-19,g2=hl-11;[g1,g2].forEach(g=>{bm(BM.grace,g,70,1.4,col);R(g+4.2,54,1.4,17,col)});R(g1+4.2,54,g2-g1+1.4,1.6,col);R(g1+4.2,57.5,g2-g1+1.4,1.6,col)}
+            if(st.orn==='double')bm(BM.dbl,n.stemX-4.5,56,1.8,col);
+            if(st.orn==='buzz')bm(BM.buzz,n.stemX-2.4,52,1.6,col);
+          }
+          el.push(e('text',{key:k++,x:n.cx,y:124,textAnchor:'middle',fontFamily:"'Press Start 2P',monospace",fontSize:11,fill:st.state==='r'?T.rest:T[st.hand]},st.state==='r'?'·':st.hand));
+        });
+        if(beams>0){let run=[];const flush=()=>{if(run.length>=2){for(let l=0;l<beams;l++)R(run[0].stemX,36+l*6,run[run.length-1].stemX-run[0].stemX+1.8,3.6,T.ink)}else if(run.length===1){for(let l=0;l<beams;l++)bm(BM.flag,run[0].stemX+1.8,36+l*6,1.8,run[0].col)}run=[]};info.forEach(n=>{if(n.st.state==='r')flush();else run.push(n)});flush()}
+        if(tup){const x0=info[0].cx-8,x1=info[s-1].cx+8,mid=(x0+x1)/2;R(x0,9,1.6,6,T.ink2);R(x1-1.6,9,1.6,6,T.ink2);R(x0,9,mid-9-x0,1.6,T.ink2);R(mid+9,9,x1-mid-9,1.6,T.ink2);el.push(e('text',{key:k++,x:mid,y:16,textAnchor:'middle',fontFamily:'VT323,monospace',fontSize:18,fill:T.ink2},String(s)))}
+        info.forEach(n=>{
+          const st=n.st,i=n.idx,isCur=playing&&i===cur;
+          const m={n:{bg:'var(--ink2)',bc:'var(--ink)',bs:'solid',fg:'var(--surface)',glyph:'',h:64,m:0,sh:'3px 3px 0 var(--shadow)'},a:{bg:'var(--accent)',bc:'var(--accent)',bs:'solid',fg:'var(--accentInk)',glyph:'>',h:72,m:-4,sh:'3px 3px 0 var(--shadow), 0 0 18px var(--glow)'},r:{bg:'transparent',bc:'var(--rest)',bs:'dashed',fg:'var(--rest)',glyph:'–',h:64,m:0,sh:'none'}}[st.state];
+          const sh=isCur?'0 0 0 3px var(--bg), 0 0 0 6px var(--accent), 0 0 26px 4px var(--glow)':m.sh;
+          const o=ORN.find(x=>x[0]===st.orn);
+          if(isCur)curLeft=n.x/W*100;
+          pads.push({left:n.x/W*100,width:SW/W*100,...m,sh,hasOrn:st.orn!=='none'&&st.state!=='r',ornTag:o?o[1]:'',hand:st.hand,hc:st.hand==='R'?'var(--R)':'var(--L)',ho:st.state==='r'?0.45:1,title:'Шаг '+(i+1),
+            toggle:()=>this.padClick(i),flip:()=>this.flip(i),ctx:ev=>{ev.preventDefault();this.openOrn(i,ev.clientX,ev.clientY)},down:ev=>this.padDown(i,ev),up:()=>clearTimeout(this.lpT)});
+        });
+      }
+      rows.push({svg:e('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',style:{display:'block',overflow:'visible',position:'relative'},shapeRendering:'crispEdges'},el),pads,groups,minW:mob?Math.round(W*1.2):0,maxW:mob?Math.round(W*2):100000,svgH:mob?'auto':Math.round(H*K)+'px',hasCur:curLeft!==null,curLeft,curW:SW/W*100,gutterW:G/W*100});
+    }
+    return rows;
+  }
+  sw(on,toggle,label){ return {label,toggle,track:on?'var(--accent)':'var(--surface2)',knob:on?26:2,knobBg:on?'var(--accentInk)':'var(--ink2)'}; }
+  renderVals(){
+    const S=this.state;const T=THEMES[S.theme];const prev=!!this.props.mobilePreview;const mob=prev||S.w<760;const desk=!mob;const s=S.subdiv;
+    const L={mob,desk,
+      rootPad:prev?'32px 16px':'0',frameW:prev?'390px':'100%',frameH:prev?'844px':'auto',frameBorder:prev?'4px solid var(--ink)':'none',frameShadow:prev?'10px 10px 0 var(--shadow)':'none',frameTf:prev?'translateZ(0)':'none',frameOv:prev?'hidden':'visible',scrollH:prev?'100%':'auto',scrollOv:prev?'auto':'visible',
+      headPad:mob?'10px 12px 0':'16px 24px 0',mainPad:mob?'12px 12px 16px':'16px 24px 24px',gap:mob?'14px':'22px',boxPad:mob?'14px':'22px',topCols:mob?'minmax(0,1fr)':'minmax(0,1.35fr) minmax(0,1fr)',
+      bpmSize:mob?'120px':'176px',bpmLabel:mob?'20px':'26px',playSize:mob?'104px':'136px',dotGap:mob?'10px':'16px',subH:mob?'64px':'84px',subFont:mob?'12px':'17px',
+      dTop:mob?'16%':'0',dLeft:mob?'0':'auto',dW:mob?'auto':'min(460px,100%)',
+      sTop:mob?'auto':'64px',sRight:mob?'0':'24px',sBottom:mob?'0':'auto',sLeft:mob?'0':'auto',sW:mob?'auto':'420px',sMaxH:mob?'84%':'calc(100vh - 100px)',
+      rootH:desk?'100vh':'auto',rootOv:desk?'hidden':'visible',fitW:desk?`calc(100% / ${S.fit})`:'100%',fitTf:desk&&S.fit<1?`scale(${S.fit})`:'none',maxW:desk?`${Math.round(1392/S.fit)}px`:'1392px'};
+    const bs=String(S.bpm);const activeBeat=S.playing&&S.cur>=0?Math.floor(S.cur/s):-1;
+    const beats=Array.from({length:S.num},(_,i)=>{const on=i===activeBeat,first=i===0;const size=mob?(first?38:30):(first?50:38);return{n:i+1,first,size,inset:first?5:4,ring:on?'var(--accent)':first?'var(--ink)':'var(--ink2)',fill:on?'var(--accent)':'var(--surface2)',core:on?'var(--accentInk)':'var(--ink)',filter:on?'drop-shadow(0 0 10px var(--glow))':'none',numColor:on?'var(--accent)':'var(--ink2)'}});
+    const r=this.curRud();
+    const q=S.search.trim().toLowerCase();const ql=q.replace(/[^rl]/g,'');
+    const match=x=>!q||x.name.toLowerCase().includes(q)||(ql.length>1&&ql.length===q.replace(/\s|·/g,'').length&&x.pat.replace(/[^RL]/g,'').toLowerCase().includes(ql));
+    let found=0;
+    const rudGroups=RUD.map(g=>{const items=RLIST.filter(x=>x.g===g.g&&match(x)).map(x=>{const on=S.rudiment===x.id;return{num:String(x.id).padStart(2,'0'),name:x.name,sub:SUBS[x.s-1][2],bc:on?'var(--accent)':'var(--ink)',bg:on?'var(--surface2)':'var(--surface)',sh:on?'0 0 14px var(--glow)':'3px 3px 0 var(--shadow)',
+      toks:x.pat.split(' ').map((t,i)=>{const p=parseTok(t,i);const rest=p.state==='r';const acc=p.state==='a';const col=rest?'var(--rest)':p.hand==='R'?'var(--R)':'var(--L)';return{ch:rest?'·':p.hand,pre:rest?'':({flam:'f',drag:'d',double:'2',buzz:'z'}[p.orn]||''),bg:acc?'var(--accent)':'transparent',fg:acc?'var(--accentInk)':col}}),
+      pick:()=>{const sub=S.nativeSub?x.s:S.subdiv;this.remap(sub,S.num);this.setState({rudiment:x.id,subdiv:sub,steps:this.fill(x,S.num*sub),drawer:mob?false:S.drawer})}}});found+=items.length;return{name:g.g,count:items.length,items}}).filter(g=>g.items.length);
+    const vk=[['master','Мастер'],['beat','Доля'],['sub','Сабдивизия'],['acc','Акцент']];
+    const tbs=[['click','Click','сухой студийный щелчок'],['woodblock','Woodblock','деревянная коробочка'],['hihat','Hi‑hat','закрытая тарелка'],['beep','Beep','8‑битный писк']];
+    const orn=S.orn?{x:S.orn.x,y:S.orn.y,n:S.orn.i+1,opts:ORN.map(o=>{const on=(S.steps[S.orn.i]||{}).orn===o[0];return{tag:o[1],label:o[2],bg:on?'var(--ink)':'transparent',fg:on?'var(--surface)':'var(--ink)',pick:()=>this.setState(st=>({steps:st.steps.map((x,j)=>j===st.orn.i?{...x,orn:o[0],state:x.state==='r'&&o[0]!=='none'?'n':x.state}:x),orn:null}))}})}:null;
+    return {
+      rootRef:this.rootRef,frameRef:this.frameRef,fitRef:this.fitRef,notaRef:this.notaRef,L,scan:(this.props.scanlines??true)&&S.theme==='dark',
+      themeBtns:[['dark','ТЁМНАЯ','☾'],['light','СВЕТЛАЯ','☀']].map(([k,l,ic])=>({label:mob?ic:l,bg:S.theme===k?'var(--ink)':'transparent',fg:S.theme===k?'var(--surface)':'var(--ink)',click:()=>this.setState({theme:k})})),
+      openSound:()=>this.setState({sound:!S.sound,drawer:false,gapPanel:false}),soundBtnBg:S.sound?'var(--ink)':'var(--surface2)',soundBtnFg:S.sound?'var(--surface)':'var(--ink)',
+      openDrawer:()=>this.setState({drawer:true,sound:false,gapPanel:false}),closeAll:()=>this.setState({drawer:false,sound:false,gapPanel:false}),anyPanel:S.drawer||((S.sound||S.gapPanel)&&mob),drawer:S.drawer,sound:S.sound,
+      statusLabel:!S.playing?'■ STOP':S.gap.on&&S.sec&&S.sec.total?(S.sec.gap?'ТИШИНА ':'КЛИК ')+S.sec.n+'/'+S.sec.total:'► PLAY',tHeadBg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accent)':'var(--ink)',tHeadFg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accentInk)':'var(--surface)',bpm:S.bpm,bpmLead:'000'.slice(bs.length),bpmMain:bs,playing:S.playing,notPlaying:!S.playing,playGlow:S.playing?'18px':'0px',
+      toggle:()=>this.toggle(),tap:()=>this.tap(),tapBg:S.tapHot?'var(--accent)':'transparent',tapFg:S.tapHot?'var(--accentInk)':'var(--accent)',
+      nudges:[-5,-1,1,5].map(d=>({label:(d>0?'+':'−')+Math.abs(d),click:()=>this.setBpm(this.state.bpm+d)})),
+      pct:(S.bpm-20)/280*100,onBpm:ev=>this.setBpm(+ev.target.value),ticks:[20,60,100,140,180,220,260,300],beats,
+      sigLabel:S.num+'/'+S.den,sigs:SIGS.map(k=>({label:k,bg:S.sigKey===k?'var(--ink)':'transparent',fg:S.sigKey===k?'var(--surface)':'var(--ink)',click:()=>this.setSig(k)})),
+      customBg:S.sigKey==='custom'?'var(--ink)':'transparent',customFg:S.sigKey==='custom'?'var(--surface)':'var(--ink)',pickCustom:()=>this.setCustom(S.cNum,S.cDen),
+      cNum:S.cNum,cDen:S.cDen,isCustom:S.sigKey==='custom',onCNum:ev=>this.setCustom(+ev.target.value,S.cDen),onCDen:ev=>this.setCustom(S.cNum,+ev.target.value),
+      subs:SUBS.map(([n,full,short])=>({n,full,label:(mob||S.w<1100)?short:full,icon:this.subIcon(n),bg:s===n?'var(--ink)':'transparent',fg:s===n?'var(--surface)':'var(--ink)',click:()=>this.setSub(n)})),
+      measureInfo:`${S.num}/${S.den} · ${SUBS[s-1][1].toUpperCase()} · ${S.num*s} ШАГ.`,hasRud:!!r,rudName:r?r.name:'',
+      actions:[['Скопировать 1‑ю долю на такт',()=>this.editSteps((x,i,st)=>({...st.steps[i%st.subdiv]}))],['Всё включить',()=>this.editSteps(x=>{if(x.state==='r')x.state='n';return x})],['Сбросить акценты',()=>this.editSteps(x=>{if(x.state==='a')x.state='n';return x})],['Чередовать R/L',()=>this.editSteps((x,i)=>{x.hand=i%2?'L':'R';return x})]].map(([label,click])=>({label,click})),
+      rows:this.buildRows(T,mob),curTrans:(this.props.cursorMotion??'smooth')==='smooth'?'left 50ms steps(2,start)':'none',
+      search:S.search,onSearch:ev=>this.setState({search:ev.target.value}),foundCount:String(found).padStart(2,'0'),rudGroups,
+      native:this.sw(S.nativeSub,null,''),toggleNative:()=>this.setState({nativeSub:!S.nativeSub}),
+      timbres:tbs.map(([k,name,sub])=>({name,sub,bg:S.timbre===k?'var(--ink)':'transparent',fg:S.timbre===k?'var(--surface)':'var(--ink)',pick:()=>this.setState({timbre:k}),preview:()=>{this.ctxOk();const t=this.ctx.currentTime+0.02;this.voice(t,0.9,2,k);this.voice(t+0.18,0.6,0,k);this.voice(t+0.36,0.6,0,k)}})),
+      vols:vk.map(([k,label])=>{const v=S.vol[k];return{label,val:v,txt:String(v).padStart(3,'0'),segs:Array.from({length:20},(_,i)=>({c:i<Math.round(v/5)?(k==='acc'?'var(--accent)':'var(--ink)'):'var(--staff)'})),change:ev=>{const nv=+ev.target.value;this.setState(st=>({vol:{...st.vol,[k]:nv}}));if(k==='master'&&this.out)this.out.gain.value=nv/100}}}),
+      switches:[this.sw(S.accentFirst,()=>this.setState({accentFirst:!S.accentFirst}),'Акцент на первую долю'),this.sw(S.clickMode==='beats',()=>this.setState({clickMode:S.clickMode==='beats'?'pattern':'beats'}),'Слышать только доли')],
+      gapPanel:S.gapPanel,flash:S.flash,openGap:()=>this.setState({gapPanel:!S.gapPanel,sound:false,drawer:false}),
+      gapBtnBg:S.gap.on?'var(--accent)':S.gapPanel?'var(--ink)':'var(--surface2)',gapBtnFg:S.gap.on?'var(--accentInk)':S.gapPanel?'var(--surface)':'var(--ink)',
+      gapSwitch:this.sw(S.gap.on,()=>this.setGap({on:!S.gap.on}),S.gap.on?'Gap Click включён':'Включить Gap Click'),
+      gapCounts:[['click','КЛИК'],['gap','ТИШИНА']].map(([k,label])=>{const v=S.gap[k];const unit=(S.gap.mode==='fixed'?'':'до ')+(v%10===1&&v%100!==11?'такт':[2,3,4].includes(v%10)&&![12,13,14].includes(v%100)?'такта':'тактов');return{label,txt:String(v),unit,minus:()=>this.setGap({[k]:Math.max(1,v-1)}),plus:()=>this.setGap({[k]:Math.min(16,v+1)})}}),
+      gapModes:[['fixed','ФИКС'],['random','СЛУЧАЙНО'],['grow','РАСТЁТ']].map(([k,label])=>({label,bg:S.gap.mode===k?'var(--ink)':'transparent',fg:S.gap.mode===k?'var(--surface)':'var(--ink)',click:()=>this.setGap({mode:k})})),
+      gapModeHint:{fixed:'Ровно: столько-то тактов клик, столько-то тишина.',random:'Длина клика и тишины каждый раз случайная (до заданной) — не подготовишься заранее.',grow:'Тишина растёт: 1 такт, потом 2, 3… до заданной, затем по кругу.'}[S.gap.mode],
+      ghostOpts:[[0,'ТИШИНА'],[8,'ШЁПОТ'],[22,'ТИХО']].map(([v,label])=>({label,bg:S.gap.ghost===v?'var(--ink)':'transparent',fg:S.gap.ghost===v?'var(--surface)':'var(--ink)',click:()=>this.setGap({ghost:v})})),
+      clickModes:[['pattern','Ноты такта','как в сетке'],['beats','Доли','1 2 3 4'],['offbeat','Офбит','«и» / 3-я триоль'],['backbeat','2 и 4','бэкбит'],['last','Последнее деление','«а» / 3-я триоль']].map(([k,label,hint])=>({label,hint,bg:S.clickMode===k?'var(--ink)':'transparent',fg:S.clickMode===k?'var(--surface)':'var(--ink)',click:()=>this.setState({clickMode:k})})),
+      hasOrn:!!orn,orn:orn||{opts:[]},closeOrn:()=>this.setState({orn:null}),closeOrnCtx:ev=>{ev.preventDefault();this.setState({orn:null})}
+    };
+  }
+}
+</script>
+</body>
+</html>
