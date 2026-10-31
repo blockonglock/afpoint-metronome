@@ -322,6 +322,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
                   <span style="display:flex;align-items:center;justify-content:center;min-width:20px;height:24px;padding:0 3px;background:{{ t.bg }};color:{{ t.fg }};font-family:var(--px);font-size:10px"><span style="font-family:VT323,monospace;font-size:14px;opacity:.8">{{ t.pre }}</span>{{ t.ch }}</span>
                 </sc-for>
               </span>
+              <sc-if value="{{ r.hasNote }}">
+                <span style="font-size:13px;line-height:1.35;color:var(--ink2)">{{ r.note }}</span>
+              </sc-if>
             </button>
           </sc-for>
         </div>
@@ -456,13 +459,14 @@ const THEMES={
  light:{bg:'#e6dcc5',surface:'#f6efdf',surface2:'#ebe2cd',ink:'#26252e',ink2:'#5f5a50',staff:'#a99e87',accent:'#cc6a1c',accentInk:'#1f1a14',R:'#3d7a35',L:'#2c5aa6',rest:'#b5a990',shadow:'#26252e',glow:'rgba(204,106,28,.35)',band:'rgba(204,106,28,.13)'}
 };
 const RUD=[
+{g:'JD BECK',items:[['Фраза 4+5 · бэкбит','R R R R L> R R R R R R R L> R R R R R R R L> R R R R R R R L> R R R R R R R',4,{sig:[9,4],bpm:70,click:'beats',gap:{on:false},note:'Грув А, т.5–12: такт 4/4 + такт 5/4. R — хэт 16-ми, L> — бэкбит левой (правая не останавливается). 70 → 88 BPM'}],['Фраза 4+5 · Gap 2/2','R R R R L> R R R R R R R L> R R R R R R R L> R R R R R R R L> R R R R R R R',4,{sig:[9,4],bpm:80,click:'beats',gap:{on:true,click:2,gap:2,mode:'fixed',ghost:0},note:'Тот же грув: 2 фразы с кликом, 2 в тишине. «Раз» после тишины должен упасть на место'}],['Single Stroke 32-е','R> L R L R L R L',8,{sig:[4,4],bpm:50,click:'pattern',note:'т.3, 49, 109, 116–124. 50 → 88 BPM, +4 когда чисто'}],['Doubles 32-е','R> R L L R R L L',8,{sig:[4,4],bpm:50,click:'pattern',note:'т.25–36, 120. Двойки ровные, второй удар не тише первого'}],['RLL на 32-х','R> L L',8,{sig:[4,4],bpm:50,click:'pattern',note:'т.55–57, 104, 116–123. Группа из 3 гуляет по доле — следи, где падает акцент'}],['Акценты 3·3·3·3·4','R> L L R> L L R> L L R> L L R> L R L',8,{sig:[4,4],bpm:50,click:'pattern',note:'т.55–58: группы по 3 и 4 на 32-х, каждые 2 доли сходятся на «раз». Хэт, нога — четверти'}],['Paradiddle-diddle 32-е','R> L R R L L',8,{sig:[4,4],bpm:50,click:'pattern',note:'т.25, 27. По 6 нот на сетке из 8 — акцент сдвигается'}],['Линейка R L K · 16-е','R> L -',4,{sig:[4,4],bpm:70,click:'pattern',note:'Пауза = бочка. R — малый, L — стэк. Потом то же 32-ми. Готовит т.25–36'}],['Линейка R L L K · 32-е','R> L L -',8,{sig:[4,4],bpm:50,click:'pattern',note:'Пауза = бочка. Нога на хэте — четверти. Т.25–36 и соло т.93–124'}],['Линейка R R L L K · 32-е','R> R L L -',8,{sig:[4,4],bpm:50,click:'pattern',note:'Пауза = бочка. Пятёрка на сетке 32-х: двойки + нога'}],['Секстоли RLRLRL','R> L R L> R L',6,{sig:[4,4],bpm:60,click:'pattern',note:'т.92, 95–97, 118. Акцент на 1 и 4. 60 → 88 BPM'}],['Секстоли RLLRLL','R> L L R> L L',6,{sig:[4,4],bpm:60,click:'pattern',note:'Как в т.118: одиночный + двойка по стэку'}]]},
 {g:'РОЛЛЫ',items:[['Single Stroke Roll','R L R L',4],['Single Stroke Four','R L R L> - -',6],['Single Stroke Seven','R L R L R L R> -',8],['Multiple Bounce Roll','zR zL zR zL',4],['Triple Stroke Roll','R R R L L L',6],['Double Stroke Open Roll','R R L L',4],['Five Stroke Roll','2R 2L R> -',4],['Six Stroke Roll','R> 2L 2R L>',4],['Seven Stroke Roll','2R 2L 2R L>',4],['Nine Stroke Roll','2R 2L 2R 2L R> - - -',4],['Ten Stroke Roll','2R 2L 2R 2L R> L> - -',4],['Eleven Stroke Roll','2R 2L 2R 2L 2R L> - -',4],['Thirteen Stroke Roll','2R 2L 2R 2L 2R 2L R> -',4],['Fifteen Stroke Roll','2R 2L 2R 2L 2R 2L 2R L>',4],['Seventeen Stroke Roll','2R 2L 2R 2L 2R 2L 2R 2L R> - - - - - - -',4]]},
 {g:'ДИДЛЫ',items:[['Single Paradiddle','R> L R R L> R L L',4],['Double Paradiddle','R> L R L R R L> R L R L L',6],['Triple Paradiddle','R> L R L R L R R L> R L R L R L L',4],['Paradiddle-diddle','R> L R R L L',6]]},
 {g:'ФЛЭМЫ',items:[['Flam','fR> - fL> -',2],['Flam Accent','fR> L R fL> R L',3],['Flam Tap','fR R fL L',4],['Flamacue','fR L> R L fR - - -',4],['Flam Paradiddle','fR> L R R fL> R L L',4],['Single Flammed Mill','fR R L R fL L R L',4],['Flam Paradiddle-diddle','fR> L R R L L fL> R L L R R',6],['Pataflafla','fR L R fL',4],['Swiss Army Triplet','fR R L fR R L',3],['Inverted Flam Tap','fR L fL R',4],['Flam Drag','fR> dL R fL> dR L',3]]},
 {g:'ДРАГИ',items:[['Drag','dR> - dL> -',2],['Single Drag Tap','dR L> dL R>',2],['Double Drag Tap','dR dR L> dL dL R>',3],['Lesson 25','dR L R> dL R L>',3],['Single Dragadiddle','R> dR L R L> dL R L',4],['Drag Paradiddle #1','R> dL R L R R L> dR L R L L',6],['Drag Paradiddle #2','R> dL R> dL R L R R',4],['Single Ratamacue','dR L R L>',4],['Double Ratamacue','dR dR L R L> -',6],['Triple Ratamacue','dR dR dR L R L>',6]]},
 {g:'ПЕРЕСТАНОВКИ',items:[['RLR · LRL','R> L R L> R L',3],['RRL','R> R L',3],['RLL','R> L L',3],['LRR','L> R R',3],['LLR','L> L R',3],['RRLL','R> R L L',4],['RLRR','R> L R R',4],['RLLR','R> L L R',4],['RRLR','R> R L R',4],['LRRL','L> R R L',4]]}
 ];
-const RLIST=[];RUD.forEach(g=>g.items.forEach(it=>RLIST.push({id:RLIST.length+1,g:g.g,name:it[0],pat:it[1],s:it[2]})));
+const RLIST=[];RUD.forEach(g=>g.items.forEach(it=>RLIST.push({id:RLIST.length+1,g:g.g,name:it[0],pat:it[1],s:it[2],o:it[3]})));
 const ORN=[['none','—','Нет'],['flam','FL','Флэм'],['drag','DR','Драг'],['double','×2','Дабл‑строк'],['buzz','Z','Бас‑ролл']];
 const OM={f:'flam',d:'drag','2':'double',z:'buzz'};
 const BM={
@@ -582,6 +586,11 @@ class Component extends DCLogic {
   // edits
   setBpm(v){ this.setState({bpm:Math.max(20,Math.min(300,Math.round(v)))}); }
   tap(){ const now=performance.now();const t=(this.taps||[]).filter(x=>now-x<2500);t.push(now);this.taps=t.slice(-6);if(this.taps.length>=2){const a=this.taps;this.setBpm(60000/((a[a.length-1]-a[0])/(a.length-1)))}this.setState({tapHot:true});clearTimeout(this.tapT);this.tapT=setTimeout(()=>this.setState({tapHot:false}),120); }
+  // Exercise presets carry their own meter, tempo, subdivision and click settings.
+  applyPreset(x){ const o=x.o,S=this.state;const [n,d]=o.sig||[S.num,S.den];const k=n+'/'+d;const key=SIGS.includes(k)?k:'custom';const sub=x.s;
+    this.remap(sub,n);const u={rudiment:x.id,subdiv:sub,num:n,den:d,sigKey:key,steps:this.fill(x,n*sub)};
+    if(key==='custom'){u.cNum=n;u.cDen=d} if(o.bpm)u.bpm=o.bpm; if(o.click)u.clickMode=o.click;
+    u.gap={...S.gap,...(o.gap||{on:false})};this.cyc=null;this.grow=0; this.setState(u); }
   curRud(){ return this.state.rudiment&&RLIST.find(x=>x.id===this.state.rudiment); }
   remap(s1,num){
     if(!this.timer||!this.ctx)return; const {bpm,subdiv:s0}=this.state; const beat=60/bpm;
@@ -686,7 +695,8 @@ class Component extends DCLogic {
     let found=0;
     const rudGroups=RUD.map(g=>{const items=RLIST.filter(x=>x.g===g.g&&match(x)).map(x=>{const on=S.rudiment===x.id;return{num:String(x.id).padStart(2,'0'),name:x.name,sub:SUBS[x.s-1][2],bc:on?'var(--accent)':'var(--ink)',bg:on?'var(--surface2)':'var(--surface)',sh:on?'0 0 14px var(--glow)':'3px 3px 0 var(--shadow)',
       toks:x.pat.split(' ').map((t,i)=>{const p=parseTok(t,i);const rest=p.state==='r';const acc=p.state==='a';const col=rest?'var(--rest)':p.hand==='R'?'var(--R)':'var(--L)';return{ch:rest?'·':p.hand,pre:rest?'':({flam:'f',drag:'d',double:'2',buzz:'z'}[p.orn]||''),bg:acc?'var(--accent)':'transparent',fg:acc?'var(--accentInk)':col}}),
-      pick:()=>{const sub=S.nativeSub?x.s:S.subdiv;this.remap(sub,S.num);this.setState({rudiment:x.id,subdiv:sub,steps:this.fill(x,S.num*sub),drawer:mob?false:S.drawer})}}});found+=items.length;return{name:g.g,count:items.length,items}}).filter(g=>g.items.length);
+      note:(x.o&&x.o.note)||'',hasNote:!!(x.o&&x.o.note),
+      pick:()=>{if(x.o){this.applyPreset(x);if(mob)this.setState({drawer:false});return}const sub=S.nativeSub?x.s:S.subdiv;this.remap(sub,S.num);this.setState({rudiment:x.id,subdiv:sub,steps:this.fill(x,S.num*sub),drawer:mob?false:S.drawer})}}});found+=items.length;return{name:g.g,count:items.length,items}}).filter(g=>g.items.length);
     const vk=[['master','Мастер'],['beat','Доля'],['sub','Сабдивизия'],['acc','Акцент']];
     const tbs=[['click','Click','сухой студийный щелчок'],['woodblock','Woodblock','деревянная коробочка'],['hihat','Hi‑hat','закрытая тарелка'],['beep','Beep','8‑битный писк']];
     const orn=S.orn?{x:S.orn.x,y:S.orn.y,n:S.orn.i+1,opts:ORN.map(o=>{const on=(S.steps[S.orn.i]||{}).orn===o[0];return{tag:o[1],label:o[2],bg:on?'var(--ink)':'transparent',fg:on?'var(--surface)':'var(--ink)',pick:()=>this.setState(st=>({steps:st.steps.map((x,j)=>j===st.orn.i?{...x,orn:o[0],state:x.state==='r'&&o[0]!=='none'?'n':x.state}:x),orn:null}))}})}:null;
