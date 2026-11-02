@@ -1,10 +1,11 @@
 // Offline cache for the metronome. Bump VERSION when the vendor files change.
-const VERSION = 'afm-v1';
+const VERSION = 'afm-v2';
 const SHELL = [
   './',
   './index.html',
   './AF.point%20Metronome.dc.html',
   './support.js',
+  './game.js',
   './manifest.webmanifest',
   './apple-touch-icon.png',
   './icon-192.png',

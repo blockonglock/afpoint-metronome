@@ -20,6 +20,7 @@ window.__resources={
 };
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script>
+<script src="./game.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -72,6 +73,17 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
       ЗВУК
     </button>
   </sc-if>
+  <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+    <button onClick="{{ openLad }}" title="Лесенка [L]" style="display:flex;align-items:center;gap:10px;height:46px;padding:0 16px;border:3px solid var(--ink);font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.1em;cursor:pointer;box-shadow:3px 3px 0 var(--shadow);background:{{ ladBtnBg }};color:{{ ladBtnFg }}">
+      <span style="display:flex;gap:2px;align-items:flex-end"><span style="width:4px;height:4px;background:currentColor"></span><span style="width:4px;height:8px;background:currentColor"></span><span style="width:4px;height:12px;background:currentColor"></span><span style="width:4px;height:16px;background:currentColor"></span></span>
+      ЛЕСЕНКА
+    </button>
+  </sc-if>
+  <button onClick="{{ openProfile }}" title="Профиль [P]" aria-label="Профиль" style="display:flex;align-items:center;gap:10px;height:46px;padding:0 12px;border:3px solid var(--ink);background:{{ profBtnBg }};color:{{ profBtnFg }};font-family:inherit;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)">
+    <span style="font-family:var(--px);font-size:12px;white-space:nowrap">LV{{ badge.lv }}</span>
+    <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}"><span style="display:flex;gap:2px"><sc-for list="{{ badge.segs }}" as="s"><span style="width:5px;height:12px;background:{{ s.c }}"></span></sc-for></span></sc-if>
+    <span style="display:flex;align-items:center;gap:4px;font-family:VT323,monospace;font-size:22px;line-height:1">{{ badge.flame }}{{ badge.streak }}</span>
+  </button>
 </header>
 
 <main style="max-width:{{ L.maxW }};margin:0 auto;padding:{{ L.mainPad }};display:flex;flex-direction:column;gap:{{ L.gap }}">
@@ -269,6 +281,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
       <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">ESC</span>закрыть панели</span>
       <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">G</span>gap click</span>
       <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">K</span>бочка в паузах</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">L</span>лесенка</span>
+      <span style="display:flex;gap:8px;align-items:center"><span style="font-family:VT323,monospace;font-size:20px;border:2px solid var(--surface);padding:0 6px;line-height:20px">P</span>профиль</span>
     </div>
   </footer>
 </sc-if>
@@ -276,10 +290,11 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 </div>
 
 <sc-if value="{{ L.mob }}">
-  <nav style="position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:10px;padding:10px 12px calc(14px + env(safe-area-inset-bottom));background:var(--surface);border-top:3px solid var(--ink)">
-    <button onClick="{{ openDrawer }}" style="flex:1;height:52px;border:3px solid var(--ink);background:var(--ink);color:var(--surface);font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.1em;cursor:pointer">РУДИМЕНТЫ</button>
-    <button onClick="{{ openSound }}" style="flex:1;height:52px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.1em;cursor:pointer">ЗВУК</button>
-    <button onClick="{{ openGap }}" style="flex:1;height:52px;border:3px solid var(--ink);background:{{ gapBtnBg }};color:{{ gapBtnFg }};font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.1em;cursor:pointer">ГЭП</button>
+  <nav style="position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:6px;padding:10px 10px calc(14px + env(safe-area-inset-bottom));background:var(--surface);border-top:3px solid var(--ink)">
+    <button onClick="{{ openDrawer }}" style="flex:1;height:52px;border:3px solid var(--ink);background:var(--ink);color:var(--surface);font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer">РУДИМЕНТЫ</button>
+    <button onClick="{{ openSound }}" style="flex:1;height:52px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer">ЗВУК</button>
+    <button onClick="{{ openGap }}" style="flex:1;height:52px;border:3px solid var(--ink);background:{{ gapBtnBg }};color:{{ gapBtnFg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer">ГЭП</button>
+    <button onClick="{{ openLad }}" style="flex:1;height:52px;border:3px solid var(--ink);background:{{ ladBtnBg }};color:{{ ladBtnFg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer">ЛЕСЕНКА</button>
   </nav>
 </sc-if>
 
@@ -424,6 +439,277 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   </aside>
 </sc-if>
 
+<sc-if value="{{ ladPanel }}">
+  <aside data-screen-label="Лесенка" style="padding-bottom:env(safe-area-inset-bottom);position:fixed;z-index:60;top:{{ L.sTop }};right:{{ L.sRight }};bottom:{{ L.sBottom }};left:{{ L.sLeft }};width:{{ L.sW }};max-height:{{ L.sMaxH }};overflow-y:auto;background:var(--surface);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--shadow)">
+    <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 6px 0 12px;background:var(--ink);color:var(--surface);flex:none">
+      <span style="font-weight:700;font-size:15px;letter-spacing:.14em;white-space:nowrap">ЛЕСЕНКА</span>
+      <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+      <button onClick="{{ closeAll }}" aria-label="Закрыть" style="width:34px;height:34px;border:2px solid var(--surface);background:var(--ink);color:var(--surface);font-family:VT323,monospace;font-size:24px;cursor:pointer;padding:0">X</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:16px">
+      <button onClick="{{ ladSwitch.toggle }}" style="display:flex;align-items:center;gap:12px;min-height:44px;background:none;border:0;color:var(--ink);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;padding:0;text-align:left">
+        <span style="position:relative;flex:none;width:52px;height:28px;border:3px solid var(--ink);background:{{ ladSwitch.track }}"><span style="position:absolute;top:2px;left:{{ ladSwitch.knob }}px;width:18px;height:18px;background:{{ ladSwitch.knobBg }};transition:left .12s steps(3)"></span></span>
+        <span>{{ ladSwitch.label }}</span>
+      </button>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.45;margin-top:-6px">Дольность меняется по тактам: четверти → восьмые → триоли → … → 32-е. Клавиша L.</div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">СТУПЕНИ</div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:-8px">
+        <sc-for list="{{ ladSubs }}" as="m" hint-placeholder-count="8">
+          <button onClick="{{ m.click }}" title="{{ m.full }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:62px;border:2px solid var(--ink);background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-weight:700;font-size:11px;cursor:pointer;padding:0">{{ m.icon }}<span>{{ m.label }}</span></button>
+        </sc-for>
+      </div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">ТАКТОВ НА СТУПЕНЬ</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:3px solid var(--ink);margin-top:-8px">
+        <sc-for list="{{ ladBars }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.click }}" style="height:40px;border:0;background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.08em;cursor:pointer;padding:0">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">НАПРАВЛЕНИЕ</div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:3px solid var(--ink);margin-top:-8px">
+        <sc-for list="{{ ladDirs }}" as="m" hint-placeholder-count="2">
+          <button onClick="{{ m.click }}" style="height:40px;border:0;background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.08em;cursor:pointer;padding:0">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <div style="font-family:VT323,monospace;font-size:19px;line-height:1.25;color:var(--ink2);margin-top:-4px">{{ ladPathTxt }}</div>
+      <div style="border-top:2px solid var(--staff);padding-top:14px;display:flex;flex-direction:column;gap:16px">
+      <button onClick="{{ bladSwitch.toggle }}" style="display:flex;align-items:center;gap:12px;min-height:44px;background:none;border:0;color:var(--ink);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;padding:0;text-align:left">
+        <span style="position:relative;flex:none;width:52px;height:28px;border:3px solid var(--ink);background:{{ bladSwitch.track }}"><span style="position:absolute;top:2px;left:{{ bladSwitch.knob }}px;width:18px;height:18px;background:{{ bladSwitch.knobBg }};transition:left .12s steps(3)"></span></span>
+        <span>{{ bladSwitch.label }}</span>
+      </button>
+        <div style="font-size:13px;color:var(--ink2);line-height:1.45;margin-top:-6px">Темп растёт ступеньками: каждые N тактов +шаг, пока не дойдёт до цели.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <sc-for list="{{ bladCounts }}" as="gc" hint-placeholder-count="4">
+            <div style="border:3px solid var(--ink);padding:8px 10px;display:flex;flex-direction:column;gap:4px;background:var(--surface2)">
+              <span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">{{ gc.label }}</span>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <button onClick="{{ gc.minus }}" aria-label="Меньше" style="width:40px;height:40px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);font-family:VT323,monospace;font-size:28px;cursor:pointer;padding:0">−</button>
+                <span style="font-family:VT323,monospace;font-size:36px;line-height:1">{{ gc.txt }}</span>
+                <button onClick="{{ gc.plus }}" aria-label="Больше" style="width:40px;height:40px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);font-family:VT323,monospace;font-size:28px;cursor:pointer;padding:0">+</button>
+              </div>
+              <span style="font-size:12px;color:var(--ink2);text-align:center">{{ gc.unit }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">НА ЦЕЛИ</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:3px solid var(--ink);margin-top:-8px">
+        <sc-for list="{{ bladEnds }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.click }}" style="height:40px;border:0;background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.08em;cursor:pointer;padding:0">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      </div>
+      <div style="border-top:2px solid var(--staff);padding-top:14px;display:flex;flex-direction:column;gap:6px">
+      <button onClick="{{ ladStopSw.toggle }}" style="display:flex;align-items:center;gap:12px;min-height:44px;background:none;border:0;color:var(--ink);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;padding:0;text-align:left">
+        <span style="position:relative;flex:none;width:52px;height:28px;border:3px solid var(--ink);background:{{ ladStopSw.track }}"><span style="position:absolute;top:2px;left:{{ ladStopSw.knob }}px;width:18px;height:18px;background:{{ ladStopSw.knobBg }};transition:left .12s steps(3)"></span></span>
+        <span>{{ ladStopSw.label }}</span>
+      </button>
+        <div style="font-size:13px;color:var(--ink2);line-height:1.45">Метроном сам остановится, когда лесенка пройдена до конца.</div>
+      </div>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ profile }}">
+  <section data-screen-label="Профиль" style="position:fixed;z-index:60;top:{{ L.pTop }};left:0;right:0;bottom:{{ L.pBottom }};width:{{ L.pW }};margin:0 auto;display:flex;flex-direction:column;background:var(--surface);border:3px solid var(--ink);box-shadow:8px 8px 0 var(--shadow);padding-bottom:env(safe-area-inset-bottom)">
+    <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 6px 0 12px;background:var(--ink);color:var(--surface);flex:none">
+      <span style="font-weight:700;font-size:15px;letter-spacing:.14em;white-space:nowrap">ПРОФИЛЬ</span>
+      <span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span>
+      <button onClick="{{ closeAll }}" aria-label="Закрыть" style="width:34px;height:34px;border:2px solid var(--surface);background:var(--ink);color:var(--surface);font-family:VT323,monospace;font-size:24px;cursor:pointer;padding:0">X</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:3px solid var(--ink);flex:none">
+      <sc-for list="{{ profTabs }}" as="m" hint-placeholder-count="4">
+        <button onClick="{{ m.click }}" style="height:44px;border:0;background:{{ m.bg }};color:{{ m.fg }};font-family:inherit;font-weight:700;font-size:{{ L.tabFont }};letter-spacing:.1em;cursor:pointer;padding:0">{{ m.label }}</button>
+      </sc-for>
+    </div>
+    <div style="flex:1;min-height:0;overflow-y:auto;padding:{{ L.pPad }};display:flex;flex-direction:column;gap:20px">
+
+      <sc-if value="{{ tabOver }}">
+        <div style="display:grid;grid-template-columns:{{ L.pCols }};gap:18px">
+          <div style="border:3px solid var(--ink);background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px">
+            {{ prof.avatar }}
+            <div style="font-family:var(--px);font-size:11px;line-height:1.6;color:var(--accent);text-align:center">{{ prof.rank }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+            <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
+              <div style="font-family:VT323,monospace;font-size:104px;line-height:.72;text-shadow:0 0 18px var(--glow)"><span style="font-size:34px;color:var(--ink2)">LV</span>{{ prof.lv }}</div>
+              <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                <span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">{{ prof.totalXp }}</span>
+                <span style="font-size:13px;color:var(--ink2)">{{ prof.next }}</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;gap:2px;height:22px"><sc-for list="{{ prof.xpSegs }}" as="s"><span style="flex:1;background:{{ s.c }}"></span></sc-for></div>
+              <div style="display:flex;justify-content:space-between;gap:10px;font-family:VT323,monospace;font-size:20px;color:var(--ink2)"><span>{{ prof.xpTxt }}</span><span>{{ prof.xpLeft }}</span></div>
+            </div>
+            <div style="display:grid;grid-template-columns:{{ L.statCols }};gap:10px">
+              <sc-for list="{{ prof.stats }}" as="st" hint-placeholder-count="4">
+                <div style="border:3px solid var(--ink);padding:8px 10px;background:var(--surface2);display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-weight:700;font-size:12px;letter-spacing:.14em;color:var(--ink2)">{{ st.label }}</span>
+                  <span style="font-family:VT323,monospace;font-size:32px;line-height:1;color:{{ st.c }};white-space:nowrap">{{ st.val }}</span>
+                  <span style="font-size:12px;color:var(--ink2)">{{ st.sub }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">АКТИВНОСТЬ · {{ prof.heatWeeks }} НЕДЕЛЬ</span><span style="font-size:12px;color:var(--ink2)">день в стрик — от 10 минут</span></div>
+          {{ prof.heat }}
+        </div>
+        <div style="display:grid;grid-template-columns:{{ L.pHalf }};gap:18px">
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+            <span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">ПОСЛЕДНИЕ СЕССИИ</span>
+            <sc-if value="{{ prof.noLog }}"><div style="font-size:13px;color:var(--ink2);line-height:1.45">Пока пусто. Нажми ▶ и поиграй хотя бы 15 секунд — сессия запишется сама.</div></sc-if>
+            <sc-for list="{{ prof.log }}" as="l">
+              <div style="display:grid;grid-template-columns:96px minmax(0,1fr) auto auto;gap:10px;align-items:center;border-bottom:2px solid var(--staff);padding:4px 0">
+                <span style="font-family:VT323,monospace;font-size:18px;color:var(--ink2)">{{ l.date }}</span>
+                <span style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.what }}</span>
+                <span style="font-family:VT323,monospace;font-size:18px">{{ l.dur }}</span>
+                <span style="font-family:VT323,monospace;font-size:18px;color:var(--accent)">{{ l.xp }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">ДАННЫЕ</span>
+            <div style="font-size:13px;color:var(--ink2);line-height:1.45">Прогресс хранится только в этом браузере. Сохраняй копию в файл — на случай чистки браузера или переезда.</div>
+            <div style="display:flex;gap:8px">
+              <button onClick="{{ exportProg }}" style="flex:1;height:44px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.1em;cursor:pointer">ЭКСПОРТ</button>
+              <button onClick="{{ importProg }}" style="flex:1;height:44px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.1em;cursor:pointer">ИМПОРТ</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tabSkills }}">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ prof.skills }}" as="k">
+            <div style="display:grid;grid-template-columns:{{ L.skCols }};align-items:center;gap:12px;border:3px solid var(--ink);padding:8px 12px;background:var(--surface2)">
+              <span style="display:flex;justify-content:center;color:var(--ink)">{{ k.icon }}</span>
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-weight:700;font-size:15px">{{ k.name }}</span><span style="font-family:VT323,monospace;font-size:18px;color:var(--ink2);white-space:nowrap">{{ k.xpTxt }}</span></div>
+                <div style="display:flex;gap:2px;height:12px"><sc-for list="{{ k.segs }}" as="s"><span style="flex:1;background:{{ s.c }}"></span></sc-for></div>
+              </div>
+              <span style="font-family:VT323,monospace;font-size:34px;line-height:1;text-align:right"><span style="font-size:16px;color:var(--ink2)">LV</span>{{ k.lv }}</span>
+              <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;align-items:flex-end"><span style="font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--ink2)">ВРЕМЯ</span><span style="font-family:VT323,monospace;font-size:20px;white-space:nowrap">{{ k.time }}</span></div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end"><span style="font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--ink2)">{{ k.recLabel }}</span><span style="font-family:VT323,monospace;font-size:20px;color:var(--accent);white-space:nowrap">{{ k.rec }}</span></div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:13px;color:var(--ink2);line-height:1.45">Рекорд — самый быстрый темп, который ты продержал на дольности минуту подряд. XP: 10 в минуту; ×1.5 в Gap, ×1.2 за триоли/квинтоли/септоли и за лесенки, ×1.3 у своего рекорда, ×1.5 выше рекорда.</div>
+      </sc-if>
+
+      <sc-if value="{{ tabQuests }}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">КВЕСТЫ ДНЯ</span><span style="font-size:12px;color:var(--ink2)">{{ prof.dailyRefresh }}</span></div>
+          <div style="display:grid;grid-template-columns:{{ L.cards3 }};gap:10px">
+            <sc-for list="{{ prof.daily }}" as="q" hint-placeholder-count="3">
+              <div style="border:3px solid var(--ink);background:var(--surface2);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;border-color:{{ q.bc }}">
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-weight:700;font-size:15px">{{ q.title }}</span><span style="font-family:VT323,monospace;font-size:20px;color:var(--accent);white-space:nowrap">{{ q.xp }}</span></div>
+                <span style="font-size:13px;color:var(--ink2)">{{ q.desc }}</span>
+                <div style="display:flex;gap:2px;height:10px"><sc-for list="{{ q.segs }}" as="s"><span style="flex:1;background:{{ s.c }}"></span></sc-for></div>
+                <span style="font-family:VT323,monospace;font-size:18px">{{ q.txt }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:13px;color:var(--ink2);line-height:1.45">Засчитываются сами, пока играешь. Все три за день — ещё +50 XP.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">ЗАДАНИЯ</span>
+          <div style="font-size:13px;color:var(--ink2);line-height:1.45;margin-top:-4px">Взял — метроном настроился сам. Жми ▶: таймер идёт, только пока дольность и рудимент совпадают с заданием. Потом «Завершить» и честный ответ.</div>
+          <div style="display:grid;grid-template-columns:{{ L.cards3 }};gap:10px">
+            <sc-for list="{{ prof.quests }}" as="q">
+              <div style="border:3px solid var(--ink);background:var(--surface2);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-weight:700;font-size:15px">{{ q.title }}</span><span style="font-family:VT323,monospace;font-size:20px;color:var(--accent);white-space:nowrap">{{ q.xp }}</span></div>
+                <span style="font-size:13px;color:var(--ink2);flex:1">{{ q.desc }}</span>
+                <div style="display:flex;flex-wrap:wrap;gap:4px"><sc-for list="{{ q.tags }}" as="t"><span style="border:2px solid var(--staff);padding:0 6px;font-size:12px;line-height:20px">{{ t.t }}</span></sc-for></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <span style="font-family:VT323,monospace;font-size:18px;color:var(--ink2)">{{ q.done }}</span>
+                  <button onClick="{{ q.take }}" style="height:36px;padding:0 14px;border:3px solid var(--ink);background:{{ q.btnBg }};color:{{ q.btnFg }};font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.1em;cursor:pointer">{{ q.btn }}</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">ИСПЫТАНИЯ</span>
+          <div style="font-size:13px;color:var(--ink2);line-height:1.45;margin-top:-4px">Лесенка от начала до конца, метроном остановится сам. Сыграл чисто — медаль за этот темп.</div>
+          <div style="display:grid;grid-template-columns:{{ L.cards2 }};gap:10px">
+            <sc-for list="{{ prof.chals }}" as="c">
+              <div style="border:3px solid var(--ink);background:var(--surface2);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><span style="font-weight:700;font-size:15px">{{ c.title }}</span><span style="font-size:12px;font-weight:700;color:{{ c.bestC }};white-space:nowrap">{{ c.best }}</span></div>
+                <span style="font-size:13px;color:var(--ink2)">{{ c.desc }}</span>
+                <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+                  <sc-for list="{{ c.tiers }}" as="t" hint-placeholder-count="4">
+                    <button onClick="{{ t.take }}" title="Взять испытание" style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 2px;border:2px solid {{ t.bc }};background:{{ t.bg }};color:{{ t.fg }};font-family:inherit;cursor:pointer">
+                      <span style="font-family:VT323,monospace;font-size:22px;line-height:1">{{ t.bpm }}</span>
+                      <span style="font-size:10px;font-weight:700;letter-spacing:.06em">{{ t.medal }}</span>
+                      <span style="font-family:VT323,monospace;font-size:15px;opacity:.8">{{ t.xp }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tabAch }}">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span style="font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--ink2)">АЧИВКИ · {{ prof.achCount }}</span><span style="font-size:12px;color:var(--ink2)">+50 XP за каждую</span></div>
+        <div style="display:grid;grid-template-columns:{{ L.achCols }};gap:8px">
+          <sc-for list="{{ prof.ach }}" as="a">
+            <div style="display:flex;gap:10px;align-items:flex-start;border:3px solid {{ a.bc }};padding:10px;background:{{ a.bg }};opacity:{{ a.op }}">
+              {{ a.icon }}
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                <span style="font-weight:700;font-size:14px">{{ a.title }}</span>
+                <span style="font-size:12px;color:var(--ink2)">{{ a.desc }}</span>
+                <span style="font-family:VT323,monospace;font-size:16px;color:var(--accent)">{{ a.date }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ hasQuest }}">
+  <div style="position:fixed;z-index:45;left:0;right:0;bottom:{{ L.qBottom }};width:{{ L.qW }};margin:0 auto;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 14px;background:var(--surface);border:3px solid {{ qs.bc }};box-shadow:5px 5px 0 var(--shadow)">
+    <span style="font-family:var(--px);font-size:9px;color:var(--accent);white-space:nowrap">{{ qs.kind }}</span>
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ qs.title }}</span><span style="font-family:VT323,monospace;font-size:18px;white-space:nowrap;color:{{ qs.stC }}">{{ qs.status }}</span></div>
+      <div style="display:flex;gap:2px;height:8px"><sc-for list="{{ qs.segs }}" as="s"><span style="flex:1;background:{{ s.c }}"></span></sc-for></div>
+    </div>
+    <sc-if value="{{ qs.canFinish }}"><button onClick="{{ qs.finish }}" style="height:40px;padding:0 14px;border:3px solid var(--ink);background:var(--accent);color:var(--accentInk);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.1em;cursor:pointer;white-space:nowrap">ЗАВЕРШИТЬ</button></sc-if>
+    <button onClick="{{ qs.cancel }}" aria-label="Отменить квест" title="Отменить квест" style="flex:none;width:36px;height:36px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-family:VT323,monospace;font-size:22px;cursor:pointer;padding:0">X</button>
+  </div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}">
+  <div onClick="{{ closeToast }}" style="position:fixed;z-index:80;right:{{ L.tRight }};left:{{ L.tLeft }};bottom:{{ L.tBottom }};width:{{ L.tW }};background:var(--surface);border:3px solid var(--accent);box-shadow:6px 6px 0 var(--shadow),0 0 24px var(--glow);cursor:pointer">
+    <div style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;background:var(--accent);color:var(--accentInk)"><span style="font-weight:700;font-size:13px;letter-spacing:.14em">{{ toast.title }}</span><span style="flex:1"></span><span style="font-family:VT323,monospace;font-size:20px">{{ toast.time }}</span></div>
+    <div style="padding:10px 14px 12px;display:flex;flex-direction:column;gap:6px">
+      <div style="font-family:VT323,monospace;font-size:48px;line-height:.9;color:var(--accent);text-shadow:0 0 14px var(--glow)">{{ toast.xp }}</div>
+      <sc-for list="{{ toast.lines }}" as="l"><div style="display:flex;gap:8px;font-size:14px;line-height:1.3;color:{{ l.c }}"><span style="font-family:VT323,monospace;font-size:18px;width:14px;flex:none">{{ l.ic }}</span><span>{{ l.txt }}</span></div></sc-for>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ hasCheck }}">
+  <div style="position:fixed;inset:0;z-index:74;background-image:conic-gradient(var(--shadow) 25%,transparent 0 50%,var(--shadow) 0 75%,transparent 0);background-size:4px 4px;opacity:.6"></div>
+  <div style="position:fixed;z-index:75;left:0;right:0;top:50%;transform:translateY(-50%);margin:0 auto;width:min(440px,calc(100vw - 32px));background:var(--surface);border:3px solid var(--ink);box-shadow:8px 8px 0 var(--shadow)">
+    <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;background:var(--ink);color:var(--surface)"><span style="font-weight:700;font-size:15px;letter-spacing:.14em;white-space:nowrap">{{ chk.head }}</span><span style="flex:1;height:14px;background-image:conic-gradient(var(--surface) 25%,transparent 0 50%,var(--surface) 0 75%,transparent 0);background-size:4px 4px;opacity:.5"></span></div>
+    <div style="padding:18px;display:flex;flex-direction:column;gap:12px">
+      <div style="font-weight:700;font-size:18px">{{ chk.title }}</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.45;font-size:14px">{{ chk.text }}</div>
+      <button onClick="{{ chk.clean }}" style="min-height:52px;border:3px solid var(--ink);background:var(--accent);color:var(--accentInk);font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.06em;cursor:pointer">{{ chk.cleanLabel }}</button>
+      <button onClick="{{ chk.dirty }}" style="min-height:48px;border:3px solid var(--ink);background:var(--surface2);color:var(--ink);font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.06em;cursor:pointer">{{ chk.dirtyLabel }}</button>
+      <button onClick="{{ chk.later }}" style="min-height:36px;border:0;background:none;color:var(--ink2);font-family:inherit;font-size:14px;cursor:pointer;text-decoration:underline">{{ chk.laterLabel }}</button>
+    </div>
+  </div>
+</sc-if>
+
 <sc-if value="{{ flash }}">
   <div style="position:fixed;inset:0;z-index:85;pointer-events:none;box-shadow:inset 0 0 0 8px var(--accent),inset 0 0 120px var(--glow);animation:gapflash .38s steps(4,end) forwards"></div>
 </sc-if>
@@ -488,10 +774,16 @@ function defSteps(n){return Array.from({length:n},(_,i)=>({state:'n',hand:i%2?'L
 const PIX='polygon(30% 0,70% 0,70% 10%,80% 10%,80% 20%,90% 20%,90% 30%,100% 30%,100% 70%,90% 70%,90% 80%,80% 80%,80% 90%,70% 90%,70% 100%,30% 100%,30% 90%,20% 90%,20% 80%,10% 80%,10% 70%,0 70%,0 30%,10% 30%,10% 20%,20% 20%,20% 10%,30% 10%)';
 
 class Component extends DCLogic {
-  state={theme:'dark',bpm:60,playing:false,demo:false,cur:-1,num:4,den:4,sigKey:'4/4',cNum:5,cDen:8,subdiv:3,steps:defSteps(12),rudiment:null,drawer:false,sound:false,search:'',nativeSub:true,timbre:'click',vol:{master:80,beat:85,sub:55,acc:100},accentFirst:true,onlyBeats:false,orn:null,w:1440,tapHot:false,fit:1,gap:{on:false,click:2,gap:2,mode:'fixed',ghost:0},clickMode:'pattern',gapPanel:false,sec:null,flash:false,kick:false};
+  state={theme:'dark',bpm:60,playing:false,demo:false,cur:-1,num:4,den:4,sigKey:'4/4',cNum:5,cDen:8,subdiv:3,steps:defSteps(12),rudiment:null,drawer:false,sound:false,search:'',nativeSub:true,timbre:'click',vol:{master:80,beat:85,sub:55,acc:100},accentFirst:true,onlyBeats:false,orn:null,w:1440,tapHot:false,fit:1,gap:{on:false,click:2,gap:2,mode:'fixed',ghost:0},clickMode:'pattern',gapPanel:false,sec:null,flash:false,kick:false,
+    ladder:{on:false,inc:[1,2,3,4,5,6,7,8],bars:2,dir:'updown'},bladder:{on:false,start:60,step:5,every:4,target:120,end:'hold'},ladStop:false,ladPanel:false,ladInfo:null,
+    profile:false,ptab:'over',pv:0,toast:null,quest:null,check:false};
+  prog=AFG.load();
   rootRef=React.createRef(); frameRef=React.createRef(); fitRef=React.createRef(); notaRef=React.createRef();
   componentDidMount(){
     this.applyScene(this.props.scene??'stopped'); this.applyVars();
+    AFG.setMeta({pas:RLIST.filter(r=>['РОЛЛЫ','ДИДЛЫ','ФЛЭМЫ','ДРАГИ'].includes(r.g)).map(r=>r.name),jd:RLIST.filter(r=>r.g==='JD BECK').map(r=>r.name)});
+    AFG.rollDay(this.prog,AFG.dayOf(Date.now())); AFG.save(this.prog); if(this.prog.activeQuest)this.setState({quest:this.prog.activeQuest});
+    this.onHide=()=>this.saveNow(); window.addEventListener('pagehide',this.onHide);
     if(window.ResizeObserver&&this.rootRef.current){this.ro=new ResizeObserver(en=>{const w=en[0].contentRect.width;cancelAnimationFrame(this.roF);this.roF=requestAnimationFrame(()=>{if(Math.abs(w-this.state.w)>4)this.setState({w})})});this.ro.observe(this.rootRef.current)}
     if(window.ResizeObserver&&this.fitRef.current){this.fro=new ResizeObserver(()=>{cancelAnimationFrame(this.fitF);this.fitF=requestAnimationFrame(()=>this.fit())});this.fro.observe(this.fitRef.current)}
     if(window.ResizeObserver&&this.notaRef.current){this.nro=new ResizeObserver(en=>{const nw=Math.round(en[0].target.clientWidth);if(Math.abs(nw-(this.state.nw||0))>2)this.setState({nw})});this.nro.observe(this.notaRef.current)}
@@ -501,7 +793,7 @@ class Component extends DCLogic {
     window.addEventListener('resize',this.onRs); this.onRs(); setTimeout(this.onRs,300); setTimeout(()=>this.fit(),600);
   }
   componentDidUpdate(pp){ pp=pp||{}; if(pp.scene!==this.props.scene)this.applyScene(this.props.scene); if(this._vt!==this.state.theme||this._vf!==this.props.font){this._vt=this.state.theme;this._vf=this.props.font;this.applyVars()} }
-  componentWillUnmount(){ this.stopEngine(); this.wake(false); document.removeEventListener('visibilitychange',this.onVis); window.removeEventListener('keydown',this.onKey); window.removeEventListener('resize',this.onRs); this.ro&&this.ro.disconnect(); this.fro&&this.fro.disconnect(); this.nro&&this.nro.disconnect(); }
+  componentWillUnmount(){ this.saveNow(); window.removeEventListener('pagehide',this.onHide); clearInterval(this.trk); this.stopEngine(); this.wake(false); document.removeEventListener('visibilitychange',this.onVis); window.removeEventListener('keydown',this.onKey); window.removeEventListener('resize',this.onRs); this.ro&&this.ro.disconnect(); this.fro&&this.fro.disconnect(); this.nro&&this.nro.disconnect(); }
   fit(){
     const el=this.fitRef.current; if(!el||this.props.mobilePreview||this.state.w<760)return;
     const h=el.offsetHeight; if(!h)return;
@@ -544,16 +836,21 @@ class Component extends DCLogic {
   stopEngine(){ clearInterval(this.timer); cancelAnimationFrame(this.raf); this.timer=null; }
   // Keep the phone screen on while the metronome plays.
   wake(on){ try{ if(on){ if(navigator.wakeLock&&!this.wl)navigator.wakeLock.request('screen').then(l=>{this.wl=l;l.addEventListener('release',()=>{if(this.wl===l)this.wl=null})}).catch(()=>{}) } else if(this.wl){this.wl.release().catch(()=>{});this.wl=null} }catch(e){} }
-  toggle(){ if(this.state.playing){this.stopEngine();this.wake(false);this.setState({playing:false,demo:false,cur:-1,sec:null,flash:false})} else this.start(); }
+  toggle(){ if(this.state.playing)this.stopPlay(); else this.start(); }
+  stopPlay(){ this.track(); this.stopEngine(); this.wake(false); this.live=null; this.lad=null; this.halt=false; this.setState({playing:false,demo:false,cur:-1,sec:null,flash:false,ladInfo:null}); this.endSession(); }
   start(){
-    const c=this.ctxOk(); this.stopEngine(); this.next=c.currentTime+0.1; this.si=0; this.q=[]; this.cyc=null; this.grow=0; this.curSec=null;
+    const c=this.ctxOk(); this.stopEngine(); this.next=c.currentTime+0.1; this.si=0; this.q=[]; this.cyc=null; this.grow=0; this.curSec=null; this.live=null; this.lad=null; this.halt=false;
     this.timer=setInterval(()=>this.sched(),25); this.sched();
-    const tick=()=>{const now=c.currentTime-(c.outputLatency||0)-(c.baseLatency||0);let it=null;while(this.q.length&&this.q[0].t<=now)it=this.q.shift();if(it){const u={};if(it.i!==this.state.cur)u.cur=it.i;const ps=this.state.sec;if(it.sec!==ps){u.sec=it.sec;if(ps&&it.sec&&ps.gap!==it.sec.gap){u.flash=true;clearTimeout(this.flT);this.flT=setTimeout(()=>this.setState({flash:false}),380)}}if(Object.keys(u).length)this.setState(u)}this.raf=requestAnimationFrame(tick)};
-    this.raf=requestAnimationFrame(tick); this.wake(true); this.setState({playing:true,demo:false,cur:-1});
+    const tick=()=>{const now=c.currentTime-(c.outputLatency||0)-(c.baseLatency||0);let it=null;while(this.q.length&&this.q[0].t<=now){const x=this.q.shift();if(x.apply)this.applyLive(x.apply);if(x.pass)x.pass.forEach(p=>this.onPass(p));if(x.stop){this.finishRun();return}it=x}if(it){const u={};if(it.i!==this.state.cur)u.cur=it.i;const ps=this.state.sec;if(it.sec!==ps){u.sec=it.sec;if(ps&&it.sec&&ps.gap!==it.sec.gap){u.flash=true;clearTimeout(this.flT);this.flT=setTimeout(()=>this.setState({flash:false}),380)}}if(Object.keys(u).length)this.setState(u)}this.raf=requestAnimationFrame(tick)};
+    this.raf=requestAnimationFrame(tick); this.wake(true); this.setState({playing:true,demo:false,cur:-1}); this.beginSession();
   }
-  sched(){ const c=this.ctx;const {bpm,subdiv:s,steps}=this.state;const d=60/bpm/s;
-    if(this.next<c.currentTime){const m=Math.ceil((c.currentTime-this.next)/d);this.next+=m*d;this.si=(this.si+m)%steps.length}
-    while(this.next<c.currentTime+0.12){const i=this.si%steps.length;if(i===0||!this.curSec)this.curSec=this.nextSection();this.playStep(i,this.next,d,this.curSec);this.q.push({i,t:this.next,sec:this.curSec});this.next+=d;this.si=(i+1)%steps.length} }
+  sched(){ if(this.halt)return; const c=this.ctx;
+    {const E=this.eng();const d=60/E.bpm/E.subdiv;if(this.next<c.currentTime){const m=Math.ceil((c.currentTime-this.next)/d);this.next+=m*d;this.si=(this.si+m)%E.steps.length}}
+    while(this.next<c.currentTime+0.12){let E=this.eng();const i=this.si%E.steps.length;let apply=null,pass=null;
+      // Bar line: ladders may change the subdivision / tempo, or end the run.
+      if(i===0){const r=this.ladderBar();if(r){if(r.pass.length)pass=r.pass;if(r.stop){this.voice(this.next,this.state.vol.acc/100*0.9,2);this.q.push({i:-1,t:this.next,pass,stop:true});this.halt=true;return}apply=r.apply;E=this.eng()}}
+      if(i===0||!this.curSec)this.curSec=this.nextSection();
+      const d=60/E.bpm/E.subdiv;this.playStep(i,this.next,d,this.curSec,E);this.q.push({i,t:this.next,sec:this.curSec,apply,pass});this.next+=d;this.si=(i+1)%E.steps.length} }
   // Gap Click: bars alternate between a click phase and a silent (gap) phase.
   nextSection(){
     const g=this.state.gap; if(!g.on){this.cyc=null;return {gap:false,n:0,total:0}}
@@ -579,8 +876,8 @@ class Component extends DCLogic {
     if(m==='last')return k===(s>1?s-1:0);
     return false;
   }
-  playStep(i,t,d,sec){
-    const {steps,subdiv:s,vol,accentFirst,gap,clickMode,kick}=this.state;const st=steps[i];if(!st)return;const beat=i%s===0;
+  playStep(i,t,d,sec,E){
+    const {vol,accentFirst,gap,clickMode,kick}=this.state;const {steps,subdiv:s}=E||this.state;const st=steps[i];if(!st)return;const beat=i%s===0;
     const mul=sec&&sec.gap&&gap.on?gap.ghost/100:1; if(mul<=0)return;
     this.out.gain.value=vol.master/100;
     if(kick&&st.state==='r')this.kickVoice(t,vol.beat/100*0.9*mul);
@@ -594,7 +891,7 @@ class Component extends DCLogic {
     if(st.orn==='buzz')for(let k=1;k<5;k++)this.voice(t+k*d/5,g*(0.6-k*0.1),0);
   }
   // edits
-  setBpm(v){ this.setState({bpm:Math.max(20,Math.min(300,Math.round(v)))}); }
+  setBpm(v){ const bpm=Math.max(20,Math.min(300,Math.round(v))); if(this.live)this.live.bpm=bpm; this.setState({bpm}); }
   tap(){ const now=performance.now();const t=(this.taps||[]).filter(x=>now-x<2500);t.push(now);this.taps=t.slice(-6);if(this.taps.length>=2){const a=this.taps;this.setBpm(60000/((a[a.length-1]-a[0])/(a.length-1)))}this.setState({tapHot:true});clearTimeout(this.tapT);this.tapT=setTimeout(()=>this.setState({tapHot:false}),120); }
   // Exercise presets carry their own meter, tempo, subdivision and click settings.
   applyPreset(x){ const o=x.o,S=this.state;const [n,d]=o.sig||[S.num,S.den];const k=n+'/'+d;const key=SIGS.includes(k)?k:'custom';const sub=x.s;
@@ -603,13 +900,13 @@ class Component extends DCLogic {
     u.gap={...S.gap,...(o.gap||{on:false})};this.cyc=null;this.grow=0; this.setState(u); }
   curRud(){ return this.state.rudiment&&RLIST.find(x=>x.id===this.state.rudiment); }
   remap(s1,num){
-    if(!this.timer||!this.ctx)return; const {bpm,subdiv:s0}=this.state; const beat=60/bpm;
+    if(!this.timer||!this.ctx)return; const {bpm,subdiv:s0}=this.eng(); const beat=60/bpm;
     const b=Math.floor(this.si/s0),k0=this.si%s0,beatStart=this.next-k0*beat/s0;
     let k1=Math.ceil(k0*s1/s0-1e-9),b1=b; if(k1>=s1){k1=0;b1=b+1}
     this.next=beatStart+(b1-b)*beat+k1*beat/s1; this.si=(b1%num)*s1+k1;
   }
   reshape(num,den,s,extra){ this.remap(s,num); const r=this.curRud();const n=num*s;const steps=r?this.fill(r,n):Array.from({length:n},(_,i)=>this.state.steps[i]?{...this.state.steps[i]}:{state:'n',hand:i%2?'L':'R',orn:'none'});this.setState({num,den,subdiv:s,steps,...(extra||{})}); }
-  setSub(s){ this.reshape(this.state.num,this.state.den,s); }
+  setSub(s){ this.ladderOff(); this.reshape(this.state.num,this.state.den,s); }
   setSig(k){ const [n,d]=k.split('/').map(Number); this.reshape(n,d,this.state.subdiv,{sigKey:k}); }
   setCustom(n,d){ n=Math.max(1,Math.min(16,n||1)); d=d>=12?16:d>=6?8:4; this.reshape(n,d,this.state.subdiv,{sigKey:'custom',cNum:n,cDen:d}); }
   editSteps(fn){ this.setState(s=>({steps:s.steps.map((x,i)=>fn({...x},i,s))})); }
@@ -626,7 +923,9 @@ class Component extends DCLogic {
     else if(/^[1-8]$/.test(e.key))this.setSub(+e.key);
     else if(/^[gGпП]$/.test(e.key))this.setGap({on:!this.state.gap.on});
     else if(/^[kKлЛ]$/.test(e.key))this.setState({kick:!this.state.kick});
-    else if(e.key==='Escape')this.setState({drawer:false,sound:false,gapPanel:false,orn:null});
+    else if(/^[lLдД]$/.test(e.key))this.setLadder({on:!this.state.ladder.on});
+    else if(/^[pPзЗ]$/.test(e.key))this.setState({profile:!this.state.profile,drawer:false,sound:false,gapPanel:false,ladPanel:false});
+    else if(e.key==='Escape')this.setState({drawer:false,sound:false,gapPanel:false,ladPanel:false,profile:false,check:false,orn:null});
   }
   isPreview(){ return !!this.props.mobilePreview; }
   // notation
@@ -689,6 +988,222 @@ class Component extends DCLogic {
     }
     return rows;
   }
+  // ---------- ladders ----------
+  // Ladder changes are scheduled ~120 ms ahead: the engine reads this.live, the UI gets the state when the bar actually starts.
+  eng(){ return this.live||this.state; }
+  applyLive(a){ const {ver,...st}=a; this.setState(st); if(this.live&&this.live.ver===ver)this.live=null; }
+  ladPath(){ const L=this.state.ladder;const seq=[1,2,3,4,5,6,7,8].filter(n=>L.inc.includes(n));if(!seq.length)return [this.state.subdiv];return L.dir==='updown'&&seq.length>1?[...seq,...seq.slice(0,-1).reverse()]:seq; }
+  ladderBar(){
+    const S=this.state,L=S.ladder,B=S.bladder;if(!L.on&&!B.on){this.lad=null;return null}
+    const E=this.eng();let g=this.lad;const pass=[];let sub=E.subdiv,bpm=E.bpm;
+    if(!g){g=this.lad={pos:0,n:0,bn:0,dir:1,held:false,path:null};if(B.on)bpm=B.start}
+    else if(B.on&&!g.held&&++g.bn>=B.every){g.bn=0;const sg=B.target>=B.start?1:-1;
+      if(g.dir>0){ if(bpm===B.target){pass.push('bpm');if(B.end==='hold')g.held=true;else if(B.end==='restart')bpm=B.start;else{g.dir=-1;bpm-=sg*B.step}}
+        else bpm=sg>0?Math.min(B.target,bpm+B.step):Math.max(B.target,bpm-B.step) }
+      else { bpm=sg>0?Math.max(B.start,bpm-B.step):Math.min(B.start,bpm+B.step); if(bpm===B.start)g.dir=1 }}
+    if(L.on){ if(!g.path){g.path=this.ladPath();g.pos=0;g.n=0;sub=g.path[0]}
+      else if(++g.n>=L.bars){g.n=0;g.pos++;if(g.pos>=g.path.length){pass.push('ladder');g.pos=L.dir==='updown'&&g.path.length>1?1:0}sub=g.path[g.pos]} }
+    else g.path=null;
+    const q=S.quest;const want=q&&q.kind==='challenge'?q.pass:S.ladStop?(L.on?'ladder':'bpm'):null;
+    const u={ladInfo:g.path?{pos:g.pos+1,len:g.path.length}:null};
+    if(sub!==E.subdiv){const n=S.num*sub,r=this.curRud();u.subdiv=sub;u.steps=r?this.fill(r,n):defSteps(n)}
+    if(bpm!==E.bpm)u.bpm=bpm;
+    if(u.subdiv||u.bpm){this.live={subdiv:u.subdiv||E.subdiv,steps:u.steps||E.steps,bpm:u.bpm||E.bpm,ver:this.lv=(this.lv||0)+1};u.ver=this.live.ver}
+    return {apply:u,pass,stop:!!(want&&pass.includes(want))};
+  }
+  setLadder(p){ this.setState(st=>({ladder:{...st.ladder,...p},ladInfo:p.on===false?null:st.ladInfo})); if(this.lad)this.lad.path=null; }
+  ladderOff(){ if(!this.state.ladder.on)return; this.setLadder({on:false}); this.live=null; (this.q||[]).forEach(x=>{if(x.apply){delete x.apply.subdiv;delete x.apply.steps}}); }
+  setBladder(p){ const B={...this.state.bladder,...p}; this.setState({bladder:B}); if(this.lad){this.lad.bn=0;this.lad.held=false;this.lad.dir=1} if(B.on&&(p.on||'start' in p))this.setBpm(B.start); }
+  onPass(p){ if(!this.sess)return; const c=this.sess.x.counters,k=p==='ladder'?'ladder':'bladder'; c[k]=(c[k]||0)+1; }
+  finishRun(){ this.stopPlay(); const q=this.state.quest; if(q&&q.kind==='challenge')this.setState({check:true}); }
+
+  // ---------- practice tracking ----------
+  blankDelta(){ return {xp:0,total:0,skills:{},secs:{},ruds:{},counters:{},rec:{},rec2:{}}; }
+  beginSession(){ this.sess={start:Date.now(),secs:0,win:[],subs:{},ruds:{},ev:null,x:this.blankDelta(),flushed:0}; this.lastT=performance.now(); clearInterval(this.trk); this.trk=setInterval(()=>this.track(),1000); }
+  // Every second of play is credited to the current subdivision, rudiment, Gap and ladder skills.
+  track(){
+    const s=this.sess;if(!s||!this.state.playing)return;
+    const now=performance.now(),dt=Math.min(65,(now-this.lastT)/1000);this.lastT=now;if(dt<=0)return;
+    const S=this.state,E=this.eng(),x=s.x,add=(o,k,v)=>o[k]=(o[k]||0)+v;
+    const ctx={sub:E.subdiv,bpm:E.bpm,gap:S.gap.on,ladder:S.ladder.on||S.bladder.on};const xp=AFG.rate(ctx,this.prog)*dt;
+    s.secs+=dt;x.total+=dt;x.xp+=xp;add(s.subs,ctx.sub,dt);
+    add(x.skills,'sub'+ctx.sub,xp);add(x.secs,'sub'+ctx.sub,dt);
+    const r=this.curRud();if(r){add(x.skills,'rud',xp);add(x.secs,'rud',dt);add(x.ruds,r.name,dt);add(s.ruds,r.name,dt)}
+    if(ctx.gap){add(x.skills,'gap',xp);add(x.secs,'gap',dt)}
+    if(ctx.ladder){add(x.skills,'ladder',xp);add(x.secs,'ladder',dt)}
+    const h=new Date().getHours();if(h<4)add(x.counters,'night',dt);else if(h>=5&&h<8)add(x.counters,'morning',dt);
+    if(ctx.bpm<=25)add(x.counters,'slow',dt);
+    // Tempo records: the slowest tempo of the last 60 / 120 s, if the subdivision stayed the same.
+    for(let k=0;k<Math.max(1,Math.round(dt));k++)s.win.push(ctx.sub*1000+ctx.bpm);if(s.win.length>120)s.win=s.win.slice(-120);
+    const held=n=>{if(s.win.length<n)return null;const w=s.win.slice(-n),sub=Math.floor(w[0]/1000);return w.every(v=>Math.floor(v/1000)===sub)?{sub,bpm:Math.min(...w.map(v=>v%1000))}:null};
+    const h1=held(60),h2=held(120);if(h1&&h1.bpm>(x.rec[h1.sub]||0))x.rec[h1.sub]=h1.bpm;if(h2&&h2.bpm>(x.rec2[h2.sub]||0))x.rec2[h2.sub]=h2.bpm;
+    const q=S.quest;if(q&&q.kind==='timed'&&!q.ready&&this.questMatch(q)){const secs=q.secs+dt;this.setState({quest:{...q,secs,ready:secs>=q.target}})}
+    if(s.secs>=15&&now-s.flushed>15000)this.flush(s);
+  }
+  questMatch(q){ const S=this.state,r=this.curRud(); return S.subdiv===q.sub&&(!q.rud||(!!r&&r.name===q.rud)); }
+  flush(s){ if(!s||s.secs<15)return; s.x.longest=s.secs; s.ev=AFG.mergeEv(s.ev,AFG.commit(this.prog,s.x,Date.now())); s.x=this.blankDelta(); s.flushed=performance.now(); this.prog.activeQuest=this.state.quest; AFG.save(this.prog); this.setState({pv:this.state.pv+1}); }
+  saveNow(){ if(this.sess)this.flush(this.sess); else { this.prog.activeQuest=this.state.quest; AFG.save(this.prog); } }
+  endSession(){
+    clearInterval(this.trk);this.trk=null;const s=this.sess;this.sess=null;if(!s||s.secs<15)return;
+    this.flush(s);
+    const top=o=>{const e=Object.entries(o).sort((a,b)=>b[1]-a[1])[0];return e&&e[0]};const sub=top(s.subs),rud=top(s.ruds);
+    AFG.logSession(this.prog,{t:s.start,secs:Math.round(s.secs),xp:Math.round(s.ev?s.ev.xp:0),what:(sub?SUBS[sub-1][1]:'')+(rud?' · '+rud:'')});
+    AFG.save(this.prog); this.showToast(s.ev,'СЕССИЯ',this.mmss(s.secs));
+  }
+  showToast(ev,title,time,note){
+    if(!ev)return;const hot='var(--accent)',ink='var(--ink)',lines=[];
+    if(note)lines.push({ic:'!',txt:note,c:ink});
+    if(ev.lvUp)lines.push({ic:'▲',txt:'Новый уровень: LV '+ev.lvUp.lv+(ev.lvUp.rank?' — «'+ev.lvUp.rank+'»':''),c:hot});
+    ev.ach.forEach(a=>lines.push({ic:'◆',txt:'Ачивка: '+a.title,c:hot}));
+    ev.records.forEach(r=>lines.push({ic:'★',txt:'Рекорд: '+r.name+' — '+r.bpm+' BPM',c:hot}));
+    ev.daily.forEach(q=>lines.push({ic:'✓',txt:'Квест дня: '+q.title+' (+'+q.xp+')',c:ink}));
+    ev.skillUps.forEach(u=>lines.push({ic:'+',txt:u.name+': ур. '+u.lv,c:ink}));
+    this.setState({toast:{title,time:time||'',xp:'+'+Math.round(ev.xp)+' XP',lines:lines.slice(0,7)}});
+    clearTimeout(this.toastT);this.toastT=setTimeout(()=>this.setState({toast:null}),lines.length?9000:4500);
+  }
+
+  // ---------- quests ----------
+  setQuest(q){ this.setState({quest:q}); this.prog.activeQuest=q; AFG.save(this.prog); }
+  takeQuest(q){
+    const S=this.state;if(S.playing)this.stopPlay();
+    const r=q.rud?RLIST.find(x=>x.name===q.rud):null,n=S.num*q.sub;this.cyc=null;this.grow=0;
+    this.setState({subdiv:q.sub,steps:r?this.fill(r,n):defSteps(n),rudiment:r?r.id:null,bpm:q.bpm,gap:{...S.gap,on:false,...(q.gap||{})},clickMode:'pattern',ladder:{...S.ladder,on:false},bladder:{...S.bladder,on:false},profile:false});
+    this.setQuest({id:q.id,kind:'timed',title:q.title,xp:q.xp,target:q.mins*60,secs:0,ready:false,sub:q.sub,rud:q.rud||null});
+  }
+  takeChallenge(c,ti){
+    const S=this.state;if(S.playing)this.stopPlay();
+    const b=c.tiers[ti],sub=c.sub||c.ladder.inc[0],n=S.num*sub;this.cyc=null;this.grow=0;
+    this.setState({subdiv:sub,steps:defSteps(n),rudiment:null,gap:{...S.gap,on:false,...(c.gap||{})},clickMode:'pattern',profile:false,
+      ladder:c.ladder?{...S.ladder,...c.ladder}:{...S.ladder,on:false},bladder:c.bladder?{...S.bladder,...c.bladder,start:b-40,target:b}:{...S.bladder,on:false},bpm:c.bladder?b-40:b});
+    this.setQuest({id:c.id,kind:'challenge',title:c.title+' · '+AFG.MEDALS[ti],xp:c.xp[ti],tier:ti,pass:c.ladder?'ladder':'bpm',start:c.bladder?b-40:b,target:b});
+  }
+  // A challenge switches ladders on; put them back off once it is over.
+  dropQuest(){ const q=this.state.quest; if(q&&q.kind==='challenge')this.setState(st=>({ladder:{...st.ladder,on:false},bladder:{...st.bladder,on:false},ladInfo:null})); this.setQuest(null); }
+  cancelQuest(){ this.dropQuest(); this.setState({check:false}); }
+  askFinish(){ if(this.state.playing)this.stopPlay(); this.setState({check:true}); }
+  answer(clean){
+    const q=this.state.quest;if(!q)return;const keep=q.kind==='challenge'&&!clean;
+    const ev=AFG.finishQuest(this.prog,q,clean,Date.now());AFG.save(this.prog);this.setState({check:false,pv:this.state.pv+1});
+    if(!keep)this.dropQuest();
+    this.showToast(ev,keep?'НЕ ЗАСЧИТАНО':q.kind==='challenge'?(clean?'МЕДАЛЬ':'ИСПЫТАНИЕ'):'КВЕСТ ВЫПОЛНЕН','',keep?'Испытание остаётся активным — жми ▶ и пробуй ещё.':clean?q.title:q.title+' — в следующий раз чище');
+  }
+  exportProg(){ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(this.prog)],{type:'application/json'}));a.download='afpoint-progress-'+AFG.dayOf(Date.now())+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000); }
+  importProg(){
+    const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
+    inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;f.text().then(t=>{let d=null;try{d=JSON.parse(t)}catch(e){}
+      if(!d||d.v!==1||typeof d.xp!=='number'){alert('Это не файл прогресса AF.point.');return}
+      if(!confirm('Заменить текущий прогресс данными из файла?'))return;
+      this.sess&&(this.sess.x=this.blankDelta());this.prog=Object.assign(AFG.empty(),d);AFG.save(this.prog);this.setState({pv:this.state.pv+1,quest:this.prog.activeQuest||null})})};
+    inp.click();
+  }
+
+  // ---------- profile visuals ----------
+  mmss(s){ s=Math.floor(s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+  fmtDur(s){ const m=Math.round(s/60); return m<60?m+' мин':Math.floor(m/60)+' ч '+(m%60)+' мин'; }
+  segs(n,pct,on,off){ const k=Math.round(Math.max(0,Math.min(1,pct))*n); return Array.from({length:n},(_,i)=>({c:i<k?on:off})); }
+  // Pixel drummer; every rank tier adds gear.
+  avatar(tier,px){
+    const e=React.createElement,R=[];const C={h:'#3b2a1d',s:'#e2a979',m:'#b9764f',e:'#14110d',b:'var(--accent)',p:'#4a4f6a',k:'#22201c',w:'#8a6a45',t:'#ead0a0',f:'#3d3a44',g:'#0d0d10',d:'#e4e4ea',r:'#8d8d99',y:'#e8b923',c:'#d4af37',a:'var(--accent)'};
+    const add=(c,l)=>l.forEach(([x,y,w,h])=>R.push([x,y+2,w||1,h||1,c]));
+    add('w',[[5,18,10,1],[9,19,2,3]]);
+    add('h',[[6,1,8,2],[5,2,1,4],[14,2,1,4]]);
+    add('s',[[6,3,8,6],[9,9,2,1]]);add('e',[[8,5,1,2],[11,5,1,2]]);add('m',[[9,7,2,1]]);
+    add('b',[[6,10,8,6],[4,10,2,4],[14,10,2,4]]);add('s',[[4,14,2,1],[14,14,2,1]]);
+    add('t',[[3,13],[2,12],[1,11],[0,10],[16,13],[17,12],[18,11],[19,10]]);
+    add('p',[[6,16,3,2],[11,16,3,2],[6,18,2,3],[12,18,2,3]]);add('k',[[5,21,3,1],[12,21,3,1]]);
+    if(tier>=1)add('a',[[6,3,8,1]]);
+    if(tier>=2)add('f',[[6,0,8,1],[5,1,1,1],[14,1,1,1],[4,4,2,3],[14,4,2,3]]);
+    if(tier>=3)add('g',[[7,5,6,1],[7,6,2,1],[11,6,2,1]]);
+    if(tier>=4){add('d',[[4,17,12,3]]);add('r',[[4,17,12,1],[4,19,12,1]])}
+    if(tier>=5){add('c',[[15,-1,5,1]]);add('f',[[17,0,1,8]])}
+    if(tier>=6)add('y',[[8,10,4,1],[9,11,2,1]]);
+    if(tier>=7)add('a',[[1,1],[2,0],[0,5],[19,4],[18,16],[1,17]]);
+    if(tier>=8)add('y',[[7,-1,6,1],[7,-2,1,1],[9,-2,2,1],[12,-2,1,1]]);
+    return e('svg',{viewBox:'0 0 20 24',width:px,height:Math.round(px*1.2),shapeRendering:'crispEdges',style:{display:'block',filter:tier>=7?'drop-shadow(0 0 10px var(--glow))':'none'}},R.map(([x,y,w,h,c],i)=>e('rect',{key:i,x,y,width:w,height:h,fill:C[c]})));
+  }
+  heatmap(P,today,weeks){
+    const e=React.createElement,cs=14,gp=3,R=[];const start=AFG.addDays(AFG.weekOf(today),-7*(weeks-1));
+    for(let w=0;w<weeks;w++)for(let d=0;d<7;d++){const k=AFG.addDays(start,w*7+d);if(k>today)continue;const m=(P.days[k]||0)/60;const op=m<=0?0:m<10?.3:m<30?.55:m<60?.8:1;
+      R.push(e('rect',{key:k,x:24+w*(cs+gp),y:d*(cs+gp),width:cs,height:cs,fill:op?'var(--accent)':'var(--surface2)',fillOpacity:op||1,stroke:k===today?'var(--ink)':'none',strokeWidth:k===today?2:0},e('title',null,k+': '+Math.round(m)+' мин')))}
+    ['ПН','','СР','','ПТ','',''].forEach((t,d)=>{if(t)R.push(e('text',{key:'l'+d,x:0,y:d*(cs+gp)+11,fontSize:10,fill:'var(--ink2)',fontFamily:'inherit'},t))});
+    const W=24+weeks*(cs+gp);return e('svg',{viewBox:`0 0 ${W} ${7*(cs+gp)}`,width:'100%',style:{display:'block',maxWidth:Math.round(W*1.5)+'px'}},R);
+  }
+  trophy(on){ const e=React.createElement,c=on?'var(--accent)':'var(--staff)';return e('svg',{viewBox:'0 0 10 10',width:30,height:30,shapeRendering:'crispEdges',style:{display:'block',flex:'none'}},[[1,0,8,1],[0,1,2,2],[8,1,2,2],[2,1,6,4],[3,5,4,1],[4,6,2,2],[2,8,6,2]].map(([x,y,w,h],i)=>e('rect',{key:i,x,y,width:w,height:h,fill:c}))); }
+  flame(c){ const e=React.createElement;return e('svg',{viewBox:'0 0 7 9',width:12,height:16,shapeRendering:'crispEdges',style:{display:'block'}},[[3,0,1,1],[2,1,2,1],[2,2,3,1],[1,3,4,1],[1,4,5,1],[0,5,6,1],[0,6,7,1],[1,7,5,1],[2,8,3,1]].map(([x,y,w,h],i)=>e('rect',{key:i,x,y,width:w,height:h,fill:c}))); }
+  glyph(t){ return React.createElement('span',{style:{fontFamily:'VT323,monospace',fontSize:'22px',lineHeight:1,whiteSpace:'nowrap'}},t); }
+
+  // Everything the header badge, ladder panel, quest strip, toast and profile render.
+  gameVals(S,mob){
+    const P=this.prog,now=Date.now(),today=AFG.dayOf(now),li=AFG.level(P.xp),st=AFG.streak(P,today),p2=n=>String(n).padStart(2,'0');
+    const sel=on=>({bg:on?'var(--ink)':'transparent',fg:on?'var(--surface)':'var(--ink)'});
+    const LD=S.ladder,B=S.bladder,ladOn=LD.on||B.on;
+    const plural=n=>n%10===1&&n%100!==11?'такт':[2,3,4].includes(n%10)&&![12,13,14].includes(n%100)?'такта':'тактов';
+    const path=(()=>{const seq=[1,2,3,4,5,6,7,8].filter(n=>LD.inc.includes(n));const p=LD.dir==='updown'&&seq.length>1?[...seq,...seq.slice(0,-1).reverse()]:seq;return p})();
+    const v={
+      badge:{lv:li.lv,segs:this.segs(8,li.pct,'var(--accent)','var(--staff)'),streak:String(st.cur),flame:this.flame(st.todayDone?'var(--accent)':'var(--ink2)')},
+      openProfile:()=>{AFG.rollDay(P,today);this.setState({profile:!S.profile,drawer:false,sound:false,gapPanel:false,ladPanel:false})},
+      profBtnBg:S.profile?'var(--ink)':'var(--surface2)',profBtnFg:S.profile?'var(--surface)':'var(--ink)',profile:S.profile,
+      ladPanel:S.ladPanel,openLad:()=>this.setState({ladPanel:!S.ladPanel,sound:false,gapPanel:false,drawer:false,profile:false}),
+      ladBtnBg:ladOn?'var(--accent)':S.ladPanel?'var(--ink)':'var(--surface2)',ladBtnFg:ladOn?'var(--accentInk)':S.ladPanel?'var(--surface)':'var(--ink)',
+      ladSwitch:this.sw(LD.on,()=>this.setLadder({on:!LD.on}),LD.on?'Лесенка дольностей включена':'Лесенка дольностей'),
+      ladSubs:SUBS.map(([n,full,short])=>({full,label:short,icon:this.subIcon(n),...sel(LD.inc.includes(n)),click:()=>{const inc=LD.inc.includes(n)?LD.inc.filter(x=>x!==n):[...LD.inc,n].sort((a,b)=>a-b);if(inc.length)this.setLadder({inc})}})),
+      ladBars:[1,2,4].map(b=>({label:b+' '+plural(b),...sel(LD.bars===b),click:()=>this.setLadder({bars:b})})),
+      ladDirs:[['up','ВВЕРХ'],['updown','ТУДА-ОБРАТНО']].map(([k,label])=>({label,...sel(LD.dir===k),click:()=>this.setLadder({dir:k})})),
+      ladPathTxt:path.map(n=>SUBS[n-1][2]).join(' → ')+(LD.dir==='up'?' → …':'')+` · ${path.length*LD.bars} ${plural(path.length*LD.bars)} за проход`,
+      bladSwitch:this.sw(B.on,()=>this.setBladder({on:!B.on}),B.on?'BPM-лесенка включена':'BPM-лесенка'),
+      bladCounts:[['start','СТАРТ','BPM',20,300,5],['target','ЦЕЛЬ','BPM',20,300,5],['step','ШАГ','+BPM за ступень',1,20,1],['every','КАЖДЫЕ','тактов',1,16,1]].map(([k,label,unit,lo,hi,d])=>{const x=B[k];return{label,txt:String(x),unit,minus:()=>this.setBladder({[k]:Math.max(lo,x-d)}),plus:()=>this.setBladder({[k]:Math.min(hi,x+d)})}}),
+      bladEnds:[['hold','ДЕРЖАТЬ'],['restart','СНАЧАЛА'],['down','ВНИЗ']].map(([k,label])=>({label,...sel(B.end===k),click:()=>this.setBladder({end:k})})),
+      ladStopSw:this.sw(S.ladStop,()=>this.setState({ladStop:!S.ladStop}),'Стоп после прохода'),
+      hasToast:!!S.toast,toast:S.toast||{lines:[]},closeToast:()=>{clearTimeout(this.toastT);this.setState({toast:null})},
+      hasQuest:!!S.quest,hasCheck:!!(S.check&&S.quest),qs:{segs:[]},chk:{},profTabs:[],prof:{}
+    };
+    const q=S.quest;
+    if(q){
+      const timed=q.kind==='timed',match=timed?this.questMatch(q):true;let pct=0,status;
+      if(timed){pct=q.secs/q.target;status=q.ready?'ГОТОВО ✓':S.playing&&!match?'НЕ ТЕ НАСТРОЙКИ':this.mmss(q.secs)+' / '+this.mmss(q.target)}
+      else if(q.pass==='ladder'){const li2=S.ladInfo;pct=S.playing&&li2?(li2.pos-1)/li2.len:0;status=S.playing&&li2?'СТУПЕНЬ '+li2.pos+'/'+li2.len:'ЖМИ ▶ · '+q.target+' BPM'}
+      else{pct=S.playing?(S.bpm-q.start)/(q.target-q.start||1):0;status=S.playing?S.bpm+' → '+q.target+' BPM':'ЖМИ ▶ · '+q.start+' → '+q.target}
+      v.qs={kind:timed?'КВЕСТ':'ИСПЫТАНИЕ',title:q.title,status,stC:q.ready?'var(--accent)':timed&&S.playing&&!match?'var(--ink2)':'var(--ink)',bc:q.ready?'var(--accent)':'var(--ink)',segs:this.segs(30,pct,'var(--accent)','var(--staff)'),canFinish:timed&&q.ready,finish:()=>this.askFinish(),cancel:()=>this.cancelQuest()};
+      const ch=q.kind==='challenge';
+      v.chk={head:ch?'ИСПЫТАНИЕ ПРОЙДЕНО':'КВЕСТ ВЫПОЛНЕН',title:q.title,text:ch?'Лесенка дошла до конца. Честно: сыграл чисто, без единой запинки?':'Время вышло. Честно: всё было чисто, без запинок?',
+        cleanLabel:'✓ ЧИСТО · +'+q.xp+' XP',dirtyLabel:ch?'✗ БЫЛИ ЗАПИНКИ · без медали':'✗ БЫЛИ ЗАПИНКИ · +'+Math.round(q.xp/2)+' XP',laterLabel:ch?'Решу потом':'Ещё поиграю',
+        clean:()=>this.answer(true),dirty:()=>this.answer(false),later:()=>this.setState({check:false})};
+    }
+    if(!S.profile)return v;
+    const rk=AFG.rankOf(li.lv),tm=Math.floor((P.days[today]||0)/60),tab=S.ptab,weeks=mob?15:26;
+    v.profTabs=[['over','ОБЗОР'],['skills','НАВЫКИ'],['quests','КВЕСТЫ'],['ach','АЧИВКИ']].map(([k,label])=>({label,...sel(tab===k),click:()=>this.setState({ptab:k})}));
+    Object.assign(v,{tabOver:tab==='over',tabSkills:tab==='skills',tabQuests:tab==='quests',tabAch:tab==='ach'});
+    const pr={rank:rk.title,lv:li.lv,totalXp:'ВСЕГО '+Math.floor(P.xp)+' XP',next:rk.next?`Следующее звание — «${rk.next.title}» на LV ${rk.next.lv}`:'Максимальное звание. Дальше — только легенды.',
+      xpTxt:li.into+' / '+li.need+' XP',xpLeft:'до LV '+(li.lv+1)+': '+(li.need-li.into),heatWeeks:weeks};
+    if(tab==='over'){Object.assign(pr,{avatar:this.avatar(rk.tier,mob?110:168),xpSegs:this.segs(40,li.pct,'var(--accent)','var(--staff)'),
+      stats:[{label:'ВСЕГО',val:this.fmtDur(P.total),sub:'за метрономом',c:'var(--ink)'},{label:'СЕГОДНЯ',val:tm+' мин',sub:st.todayDone?'день засчитан ✓':'ещё '+Math.max(1,10-tm)+' мин до стрика',c:'var(--ink)'},
+        {label:'СТРИК',val:st.cur+' дн.',sub:'лучший: '+Math.max(P.bestStreak,st.cur),c:st.cur?'var(--accent)':'var(--ink)'},{label:'ЗАМОРОЗКА',val:st.freezeLeft?'ЕСТЬ':'НЕТ',sub:'1 пропуск в неделю',c:'var(--ink)'}],
+      heat:this.heatmap(P,today,weeks),noLog:!P.log.length,
+      log:P.log.slice(0,5).map(l=>{const t=new Date(l.t);return{date:p2(t.getDate())+'.'+p2(t.getMonth()+1)+' '+p2(t.getHours())+':'+p2(t.getMinutes()),what:l.what||'—',dur:this.fmtDur(l.secs),xp:'+'+l.xp}})});
+      v.exportProg=()=>this.exportProg();v.importProg=()=>this.importProg()}
+    if(tab==='skills'){const ndone=Object.values(P.ruds).filter(x=>x>=60).length;
+      pr.skills=AFG.SKILLS.map(([k,name])=>{const xp=P.skills[k]||0,l=AFG.skillLevel(xp),n=k.startsWith('sub')?+k.slice(3):0;
+        return{name,icon:n?this.subIcon(n):this.glyph({rud:'R·L',gap:'▮ ▯',ladder:'▁▃▅'}[k]),lv:l.lv,xpTxt:l.into+' / '+l.need,segs:this.segs(24,l.pct,'var(--accent)','var(--staff)'),time:this.fmtDur(P.secs[k]||0),
+          recLabel:n?'РЕКОРД':k==='rud'?'ОСВОЕНО':'',rec:n?(P.records[n]?P.records[n]+' BPM':'—'):k==='rud'?String(ndone):''}})}
+    if(tab==='quests'){const nx=new Date(now);nx.setHours(AFG.DAY_CUT,0,0,0);if(nx<=now)nx.setDate(nx.getDate()+1);const hrs=Math.ceil((nx-now)/3.6e6);
+      pr.dailyRefresh='новые через '+hrs+' ч';const t=P.today||{secs:0,by:{}};
+      pr.daily=P.daily.list.map(d=>{const p=AFG.dailyProgress(d,P);const txt=d.k==='total'?Math.floor(t.secs/60)+' / '+d.mins+' мин':d.k==='skill'?Math.floor((t.by[d.skill]||0)/60)+' / '+d.mins+' мин':(t[d.k]||0)+' / '+d.n;
+        return{title:d.title,desc:d.desc,xp:'+'+d.xp+' XP',segs:this.segs(20,d.done?1:p,'var(--accent)','var(--staff)'),txt:d.done?'✓ ГОТОВО':txt,bc:d.done?'var(--accent)':'var(--ink)'}});
+      pr.quests=AFG.QUESTS.map(x=>{const act=!!q&&q.id===x.id,n=P.questsDone[x.id]||0;
+        return{title:x.title,desc:x.desc,xp:'+'+x.xp+' XP',tags:[SUBS[x.sub-1][1],...(x.rud?[x.rud]:[]),x.bpm+' BPM',x.mins+' мин',...(x.gap?['GAP']:[])].map(t=>({t})),done:n?'✓ ×'+n:'',
+          btn:act?'АКТИВЕН':'ВЗЯТЬ',btnBg:act?'var(--ink)':'var(--accent)',btnFg:act?'var(--surface)':'var(--accentInk)',take:()=>act?this.setState({profile:false}):this.takeQuest(x)}});
+      const MC=['#c07a3c','#aeb4bf','#e8b923','#7fe0dc'];
+      pr.chals=AFG.CHALLENGES.map(c=>{const m=P.medals[c.id]??-1;
+        return{title:c.title,desc:c.desc,best:m>=0?'ЛУЧШЕЕ: '+AFG.MEDALS[m].toUpperCase():'МЕДАЛЕЙ НЕТ',bestC:m>=0?MC[m]:'var(--ink2)',
+          tiers:c.tiers.map((b,i)=>{const got=i<=m,act=!!q&&q.id===c.id&&q.tier===i;return{bpm:String(b),medal:AFG.MEDALS[i].toUpperCase(),xp:'+'+c.xp[i],bg:got?MC[i]:act?'var(--ink)':'transparent',fg:got?'#1a1208':act?'var(--surface)':'var(--ink)',bc:got?MC[i]:'var(--ink)',take:()=>this.takeChallenge(c,i)}})}})}
+    if(tab==='ach'){let got=0;
+      pr.ach=AFG.ACH.map(a=>{const on=!!P.ach[a.id];if(on)got++;const hid=a.hidden&&!on,t=on?new Date(P.ach[a.id]):null;
+        return{title:hid?'???':a.title,desc:hid?'Скрытая ачивка':a.desc,date:on?p2(t.getDate())+'.'+p2(t.getMonth()+1)+'.'+t.getFullYear():'',icon:this.trophy(on),bc:on?'var(--accent)':'var(--ink)',bg:on?'var(--surface2)':'var(--surface)',op:on?1:.55}});
+      pr.achCount=got+' / '+AFG.ACH.length}
+    v.prof=pr;
+    return v;
+  }
+
   sw(on,toggle,label){ return {label,toggle,track:on?'var(--accent)':'var(--surface2)',knob:on?26:2,knobBg:on?'var(--accentInk)':'var(--ink2)'}; }
   renderVals(){
     const S=this.state;const T=THEMES[S.theme];const prev=!!this.props.mobilePreview;const mob=prev||S.w<760;const desk=!mob;const s=S.subdiv;
@@ -698,7 +1213,10 @@ class Component extends DCLogic {
       bpmSize:mob?'120px':'176px',bpmLabel:mob?'20px':'26px',playSize:mob?'104px':'136px',dotGap:mob?'10px':'16px',subH:mob?'64px':'84px',subFont:mob?'12px':'17px',
       dTop:mob?'16%':'0',dLeft:mob?'0':'auto',dW:mob?'auto':'min(460px,100%)',
       sTop:mob?'auto':'64px',sRight:mob?'0':'24px',sBottom:mob?'0':'auto',sLeft:mob?'0':'auto',sW:mob?'auto':'420px',sMaxH:mob?'84%':'calc(100vh - 100px)',
-      rootH:desk?'100vh':'auto',rootOv:desk?'hidden':'visible',fitW:desk?`calc(100% / ${S.fit})`:'100%',fitTf:desk&&S.fit<1?`scale(${S.fit})`:'none',maxW:desk?`${Math.round(1392/S.fit)}px`:'1392px'};
+      rootH:desk?'100vh':'auto',rootOv:desk?'hidden':'visible',fitW:desk?`calc(100% / ${S.fit})`:'100%',fitTf:desk&&S.fit<1?`scale(${S.fit})`:'none',maxW:desk?`${Math.round(1392/S.fit)}px`:'1392px',
+      pTop:mob?'5%':'64px',pBottom:mob?'0':'24px',pW:mob?'auto':'min(1040px, calc(100vw - 48px))',pPad:mob?'14px':'22px',tabFont:mob?'11px':'13px',pCols:mob?'minmax(0,1fr)':'220px minmax(0,1fr)',statCols:mob?'repeat(2,minmax(0,1fr))':'repeat(4,minmax(0,1fr))',pHalf:mob?'minmax(0,1fr)':'minmax(0,1.3fr) minmax(0,1fr)',
+      skCols:mob?'36px minmax(0,1fr) 56px':'52px minmax(0,1fr) 72px 110px 110px',cards3:mob?'minmax(0,1fr)':'repeat(3,minmax(0,1fr))',cards2:mob?'minmax(0,1fr)':'repeat(2,minmax(0,1fr))',achCols:mob?'minmax(0,1fr)':'repeat(3,minmax(0,1fr))',
+      qBottom:mob?'calc(84px + env(safe-area-inset-bottom))':'18px',qW:mob?'calc(100% - 24px)':'min(640px, calc(100vw - 48px))',tRight:mob?'12px':'24px',tLeft:mob?'12px':'auto',tBottom:mob?'calc(150px + env(safe-area-inset-bottom))':S.quest?'92px':'24px',tW:mob?'auto':'340px'};
     const bs=String(S.bpm);const activeBeat=S.playing&&S.cur>=0?Math.floor(S.cur/s):-1;
     const beats=Array.from({length:S.num},(_,i)=>{const on=i===activeBeat,first=i===0;const size=mob?(first?38:30):(first?50:38);return{n:i+1,first,size,inset:first?5:4,ring:on?'var(--accent)':first?'var(--ink)':'var(--ink2)',fill:on?'var(--accent)':'var(--surface2)',core:on?'var(--accentInk)':'var(--ink)',filter:on?'drop-shadow(0 0 10px var(--glow))':'none',numColor:on?'var(--accent)':'var(--ink2)'}});
     const r=this.curRud();
@@ -715,9 +1233,9 @@ class Component extends DCLogic {
     return {
       rootRef:this.rootRef,frameRef:this.frameRef,fitRef:this.fitRef,notaRef:this.notaRef,L,scan:(this.props.scanlines??true)&&S.theme==='dark',
       themeBtns:[['dark','ТЁМНАЯ','☾'],['light','СВЕТЛАЯ','☀']].map(([k,l,ic])=>({label:mob?ic:l,bg:S.theme===k?'var(--ink)':'transparent',fg:S.theme===k?'var(--surface)':'var(--ink)',click:()=>this.setState({theme:k})})),
-      openSound:()=>this.setState({sound:!S.sound,drawer:false,gapPanel:false}),soundBtnBg:S.sound?'var(--ink)':'var(--surface2)',soundBtnFg:S.sound?'var(--surface)':'var(--ink)',
-      openDrawer:()=>this.setState({drawer:true,sound:false,gapPanel:false}),closeAll:()=>this.setState({drawer:false,sound:false,gapPanel:false}),anyPanel:S.drawer||((S.sound||S.gapPanel)&&mob),drawer:S.drawer,sound:S.sound,
-      statusLabel:!S.playing?'■ STOP':S.gap.on&&S.sec&&S.sec.total?(S.sec.gap?'ТИШИНА ':'КЛИК ')+S.sec.n+'/'+S.sec.total:'► PLAY',tHeadBg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accent)':'var(--ink)',tHeadFg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accentInk)':'var(--surface)',bpm:S.bpm,bpmLead:'000'.slice(bs.length),bpmMain:bs,playing:S.playing,notPlaying:!S.playing,playGlow:S.playing?'18px':'0px',
+      openSound:()=>this.setState({sound:!S.sound,drawer:false,gapPanel:false,ladPanel:false,profile:false}),soundBtnBg:S.sound?'var(--ink)':'var(--surface2)',soundBtnFg:S.sound?'var(--surface)':'var(--ink)',
+      openDrawer:()=>this.setState({drawer:true,sound:false,gapPanel:false,ladPanel:false,profile:false}),closeAll:()=>this.setState({drawer:false,sound:false,gapPanel:false,ladPanel:false,profile:false}),anyPanel:S.drawer||S.profile||((S.sound||S.gapPanel||S.ladPanel)&&mob),drawer:S.drawer,sound:S.sound,
+      statusLabel:!S.playing?'■ STOP':S.ladder.on&&!S.gap.on&&S.ladInfo&&S.ladInfo.len?'► СТУПЕНЬ '+S.ladInfo.pos+'/'+S.ladInfo.len:S.gap.on&&S.sec&&S.sec.total?(S.sec.gap?'ТИШИНА ':'КЛИК ')+S.sec.n+'/'+S.sec.total:'► PLAY',tHeadBg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accent)':'var(--ink)',tHeadFg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accentInk)':'var(--surface)',bpm:S.bpm,bpmLead:'000'.slice(bs.length),bpmMain:bs,playing:S.playing,notPlaying:!S.playing,playGlow:S.playing?'18px':'0px',
       toggle:()=>this.toggle(),tap:()=>this.tap(),tapBg:S.tapHot?'var(--accent)':'transparent',tapFg:S.tapHot?'var(--accentInk)':'var(--accent)',
       nudges:[-5,-1,1,5].map(d=>({label:(d>0?'+':'−')+Math.abs(d),click:()=>this.setBpm(this.state.bpm+d)})),
       pct:(S.bpm-20)/280*100,onBpm:ev=>this.setBpm(+ev.target.value),ticks:[20,60,100,140,180,220,260,300],beats,
@@ -733,7 +1251,7 @@ class Component extends DCLogic {
       timbres:tbs.map(([k,name,sub])=>({name,sub,bg:S.timbre===k?'var(--ink)':'transparent',fg:S.timbre===k?'var(--surface)':'var(--ink)',pick:()=>this.setState({timbre:k}),preview:()=>{this.ctxOk();const t=this.ctx.currentTime+0.02;this.voice(t,0.9,2,k);this.voice(t+0.18,0.6,0,k);this.voice(t+0.36,0.6,0,k)}})),
       vols:vk.map(([k,label])=>{const v=S.vol[k];return{label,val:v,txt:String(v).padStart(3,'0'),segs:Array.from({length:20},(_,i)=>({c:i<Math.round(v/5)?(k==='acc'?'var(--accent)':'var(--ink)'):'var(--staff)'})),change:ev=>{const nv=+ev.target.value;this.setState(st=>({vol:{...st.vol,[k]:nv}}));if(k==='master'&&this.out)this.out.gain.value=nv/100}}}),
       switches:[this.sw(S.accentFirst,()=>this.setState({accentFirst:!S.accentFirst}),'Акцент на «раз»'),this.sw(S.clickMode==='beats',()=>this.setState({clickMode:S.clickMode==='beats'?'pattern':'beats'}),'Только доли'),this.sw(S.kick,()=>this.setState({kick:!S.kick}),'Бочка в паузах')],
-      gapPanel:S.gapPanel,flash:S.flash,openGap:()=>this.setState({gapPanel:!S.gapPanel,sound:false,drawer:false}),
+      gapPanel:S.gapPanel,flash:S.flash,openGap:()=>this.setState({gapPanel:!S.gapPanel,sound:false,drawer:false,ladPanel:false,profile:false}),
       gapBtnBg:S.gap.on?'var(--accent)':S.gapPanel?'var(--ink)':'var(--surface2)',gapBtnFg:S.gap.on?'var(--accentInk)':S.gapPanel?'var(--surface)':'var(--ink)',
       gapSwitch:this.sw(S.gap.on,()=>this.setGap({on:!S.gap.on}),S.gap.on?'Gap Click включён':'Включить Gap Click'),
       gapCounts:[['click','КЛИК'],['gap','ТИШИНА']].map(([k,label])=>{const v=S.gap[k];const unit=(S.gap.mode==='fixed'?'':'до ')+(v%10===1&&v%100!==11?'такт':[2,3,4].includes(v%10)&&![12,13,14].includes(v%100)?'такта':'тактов');return{label,txt:String(v),unit,minus:()=>this.setGap({[k]:Math.max(1,v-1)}),plus:()=>this.setGap({[k]:Math.min(16,v+1)})}}),
@@ -741,6 +1259,7 @@ class Component extends DCLogic {
       gapModeHint:{fixed:'Ровно: столько-то тактов клик, столько-то тишина.',random:'Длина клика и тишины каждый раз случайная (до заданной) — не подготовишься заранее.',grow:'Тишина растёт: 1 такт, потом 2, 3… до заданной, затем по кругу.'}[S.gap.mode],
       ghostOpts:[[0,'ТИШИНА'],[8,'ШЁПОТ'],[22,'ТИХО']].map(([v,label])=>({label,bg:S.gap.ghost===v?'var(--ink)':'transparent',fg:S.gap.ghost===v?'var(--surface)':'var(--ink)',click:()=>this.setGap({ghost:v})})),
       clickModes:[['pattern','Ноты такта','как в сетке'],['beats','Доли','1 2 3 4'],['offbeat','Офбит','«и» / 3-я триоль'],['backbeat','2 и 4','бэкбит'],['last','Последнее деление','«а» / 3-я триоль']].map(([k,label,hint])=>({label,hint,bg:S.clickMode===k?'var(--ink)':'transparent',fg:S.clickMode===k?'var(--surface)':'var(--ink)',click:()=>this.setState({clickMode:k})})),
+      ...this.gameVals(S,mob),
       hasOrn:!!orn,orn:orn||{opts:[]},closeOrn:()=>this.setState({orn:null}),closeOrnCtx:ev=>{ev.preventDefault();this.setState({orn:null})}
     };
   }
