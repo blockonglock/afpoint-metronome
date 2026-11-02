@@ -36,6 +36,7 @@ input[type=range]{-webkit-appearance:none;appearance:none;margin:0}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @keyframes gapflash{from{opacity:1}to{opacity:0}}
+@keyframes cipop{0%{transform:scale(1.6);opacity:0}40%{opacity:1}100%{transform:scale(1);opacity:1}}
 </style>
 </helmet>
 <div ref="{{ rootRef }}" style="min-height:100vh;height:{{ L.rootH }};overflow:{{ L.rootOv }};background:var(--bg);color:var(--ink);font-family:var(--ui);display:flex;justify-content:center;align-items:flex-start;padding:{{ L.rootPad }}">
@@ -50,7 +51,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
       <span style="width:8px;height:12px;background:var(--ink)"></span>
       <span style="width:8px;height:12px;background:var(--ink)"></span>
     </div>
-    <div style="font-family:var(--px);font-size:20px;white-space:nowrap">AF<span style="color:var(--accent)">.</span>point</div>
+    <div style="font-family:var(--px);font-size:{{ L.logoFont }};white-space:nowrap">AF<span style="color:var(--accent)">.</span>point</div>
     <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
       <div style="font-family:VT323,monospace;font-size:20px;color:var(--ink2);border:2px solid var(--ink2);padding:0 8px;line-height:24px;letter-spacing:.1em">METRONOME</div>
     </sc-if>
@@ -58,7 +59,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   <div style="flex:1"></div>
   <div style="display:flex;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--shadow)">
     <sc-for list="{{ themeBtns }}" as="t" hint-placeholder-count="2">
-      <button onClick="{{ t.click }}" style="min-width:64px;height:40px;padding:0 12px;border:0;background:{{ t.bg }};color:{{ t.fg }};font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.1em;cursor:pointer">{{ t.label }}</button>
+      <button onClick="{{ t.click }}" style="min-width:{{ L.themeMinW }};height:40px;padding:0 12px;border:0;background:{{ t.bg }};color:{{ t.fg }};font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.1em;cursor:pointer">{{ t.label }}</button>
     </sc-for>
   </div>
   <sc-if value="{{ L.desk }}" hint-placeholder-val="{{ true }}">
@@ -710,6 +711,17 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   </div>
 </sc-if>
 
+<sc-if value="{{ ciOn }}">
+  <div style="position:fixed;inset:0;z-index:72;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(circle,rgba(0,0,0,.78) 0,rgba(0,0,0,.55) 50%,rgba(0,0,0,.25) 85%)">
+    <div style="font-family:var(--px);font-size:14px;letter-spacing:.08em;color:#ecdfc4;text-shadow:3px 3px 0 #000">{{ ci.head }}</div>
+    <sc-if value="{{ ci.odd }}"><div style="font-family:VT323,monospace;font-size:260px;line-height:.78;color:var(--accent);text-shadow:0 0 40px var(--glow),8px 8px 0 var(--shadow);animation:cipop .3s steps(4,end) both">{{ ci.n }}</div></sc-if>
+    <sc-if value="{{ ci.even }}"><div style="font-family:VT323,monospace;font-size:260px;line-height:.78;color:var(--accent);text-shadow:0 0 40px var(--glow),8px 8px 0 var(--shadow);animation:cipop .3s steps(4,end) both">{{ ci.n }}</div></sc-if>
+    <div style="font-weight:700;font-size:24px;letter-spacing:.3em;color:var(--accent);text-shadow:3px 3px 0 #000">{{ ci.word }}</div>
+    <div style="display:flex;gap:10px"><sc-for list="{{ ci.dots }}" as="d" hint-placeholder-count="4"><span style="width:18px;height:18px;border:3px solid #ecdfc4;background:{{ d.c }};box-shadow:3px 3px 0 #000"></span></sc-for></div>
+    <div style="font-size:15px;font-weight:700;color:#ecdfc4;text-shadow:2px 2px 0 #000">{{ ci.title }}</div>
+  </div>
+</sc-if>
+
 <sc-if value="{{ flash }}">
   <div style="position:fixed;inset:0;z-index:85;pointer-events:none;box-shadow:inset 0 0 0 8px var(--accent),inset 0 0 120px var(--glow);animation:gapflash .38s steps(4,end) forwards"></div>
 </sc-if>
@@ -776,7 +788,7 @@ const PIX='polygon(30% 0,70% 0,70% 10%,80% 10%,80% 20%,90% 20%,90% 30%,100% 30%,
 class Component extends DCLogic {
   state={theme:'dark',bpm:60,playing:false,demo:false,cur:-1,num:4,den:4,sigKey:'4/4',cNum:5,cDen:8,subdiv:3,steps:defSteps(12),rudiment:null,drawer:false,sound:false,search:'',nativeSub:true,timbre:'click',vol:{master:80,beat:85,sub:55,acc:100},accentFirst:true,onlyBeats:false,orn:null,w:1440,tapHot:false,fit:1,gap:{on:false,click:2,gap:2,mode:'fixed',ghost:0},clickMode:'pattern',gapPanel:false,sec:null,flash:false,kick:false,
     ladder:{on:false,inc:[1,2,3,4,5,6,7,8],bars:2,dir:'updown'},bladder:{on:false,start:60,step:5,every:4,target:120,end:'hold'},ladStop:false,ladPanel:false,ladInfo:null,
-    profile:false,ptab:'over',pv:0,toast:null,quest:null,check:false};
+    profile:false,ptab:'over',pv:0,toast:null,quest:null,check:false,countIn:0};
   prog=AFG.load();
   rootRef=React.createRef(); frameRef=React.createRef(); fitRef=React.createRef(); notaRef=React.createRef();
   componentDidMount(){
@@ -837,11 +849,13 @@ class Component extends DCLogic {
   // Keep the phone screen on while the metronome plays.
   wake(on){ try{ if(on){ if(navigator.wakeLock&&!this.wl)navigator.wakeLock.request('screen').then(l=>{this.wl=l;l.addEventListener('release',()=>{if(this.wl===l)this.wl=null})}).catch(()=>{}) } else if(this.wl){this.wl.release().catch(()=>{});this.wl=null} }catch(e){} }
   toggle(){ if(this.state.playing)this.stopPlay(); else this.start(); }
-  stopPlay(){ this.track(); this.stopEngine(); this.wake(false); this.live=null; this.lad=null; this.halt=false; this.setState({playing:false,demo:false,cur:-1,sec:null,flash:false,ladInfo:null}); this.endSession(); }
+  stopPlay(){ this.track(); this.stopEngine(); this.wake(false); this.live=null; this.lad=null; this.halt=false; this.setState({playing:false,demo:false,cur:-1,sec:null,flash:false,ladInfo:null,countIn:0}); this.endSession(); }
   start(){
-    const c=this.ctxOk(); this.stopEngine(); this.next=c.currentTime+0.1; this.si=0; this.q=[]; this.cyc=null; this.grow=0; this.curSec=null; this.live=null; this.lad=null; this.halt=false;
+    const c=this.ctxOk(); this.stopEngine(); this.next=c.currentTime+0.1; this.si=0; this.q=[]; this.cyc=null; this.grow=0; this.curSec=null; this.live=null; this.lad=null; this.halt=false; this.ciEnd=0;
+    // Quests and challenges start with a one-bar count-in (4 quarter clicks) so there is time to get the sticks ready.
+    const S=this.state;if(S.quest){const b=60/(S.bladder.on?S.bladder.start:S.bpm);for(let k=0;k<4;k++){this.voice(this.next+k*b,(k?S.vol.beat:S.vol.acc)/100*0.9,k?1:2);this.q.push({i:-1,t:this.next+k*b,ci:k+1})}this.next+=4*b;this.ciEnd=this.next;this.q.push({i:-1,t:this.next,ci:0})}
     this.timer=setInterval(()=>this.sched(),25); this.sched();
-    const tick=()=>{const now=c.currentTime-(c.outputLatency||0)-(c.baseLatency||0);let it=null;while(this.q.length&&this.q[0].t<=now){const x=this.q.shift();if(x.apply)this.applyLive(x.apply);if(x.pass)x.pass.forEach(p=>this.onPass(p));if(x.stop){this.finishRun();return}it=x}if(it){const u={};if(it.i!==this.state.cur)u.cur=it.i;const ps=this.state.sec;if(it.sec!==ps){u.sec=it.sec;if(ps&&it.sec&&ps.gap!==it.sec.gap){u.flash=true;clearTimeout(this.flT);this.flT=setTimeout(()=>this.setState({flash:false}),380)}}if(Object.keys(u).length)this.setState(u)}this.raf=requestAnimationFrame(tick)};
+    const tick=()=>{const now=c.currentTime-(c.outputLatency||0)-(c.baseLatency||0);let it=null;while(this.q.length&&this.q[0].t<=now){const x=this.q.shift();if(x.apply)this.applyLive(x.apply);if(x.pass)x.pass.forEach(p=>this.onPass(p));if(x.stop){this.finishRun();return}if(x.ci!==undefined){this.setState({countIn:x.ci});continue}it=x}if(it){const u={};if(it.i!==this.state.cur)u.cur=it.i;const ps=this.state.sec;if(it.sec!==ps){u.sec=it.sec;if(ps&&it.sec&&ps.gap!==it.sec.gap){u.flash=true;clearTimeout(this.flT);this.flT=setTimeout(()=>this.setState({flash:false}),380)}}if(Object.keys(u).length)this.setState(u)}this.raf=requestAnimationFrame(tick)};
     this.raf=requestAnimationFrame(tick); this.wake(true); this.setState({playing:true,demo:false,cur:-1}); this.beginSession();
   }
   sched(){ if(this.halt)return; const c=this.ctx;
@@ -1023,7 +1037,8 @@ class Component extends DCLogic {
   // Every second of play is credited to the current subdivision, rudiment, Gap and ladder skills.
   track(){
     const s=this.sess;if(!s||!this.state.playing)return;
-    const now=performance.now(),dt=Math.min(65,(now-this.lastT)/1000);this.lastT=now;if(dt<=0)return;
+    if(this.ciEnd&&this.ctx&&this.ctx.currentTime<this.ciEnd){this.lastT=performance.now();return}
+    const now=performance.now(),dt=Math.min(65,(now-this.lastT)/1000,this.ciEnd?this.ctx.currentTime-this.ciEnd:65);this.lastT=now;if(dt<=0)return;
     const S=this.state,E=this.eng(),x=s.x,add=(o,k,v)=>o[k]=(o[k]||0)+v;
     const ctx={sub:E.subdiv,bpm:E.bpm,gap:S.gap.on,ladder:S.ladder.on||S.bladder.on};const xp=AFG.rate(ctx,this.prog)*dt;
     s.secs+=dt;x.total+=dt;x.xp+=xp;add(s.subs,ctx.sub,dt);
@@ -1154,6 +1169,7 @@ class Component extends DCLogic {
       bladCounts:[['start','СТАРТ','BPM',20,300,5],['target','ЦЕЛЬ','BPM',20,300,5],['step','ШАГ','+BPM за ступень',1,20,1],['every','КАЖДЫЕ','тактов',1,16,1]].map(([k,label,unit,lo,hi,d])=>{const x=B[k];return{label,txt:String(x),unit,minus:()=>this.setBladder({[k]:Math.max(lo,x-d)}),plus:()=>this.setBladder({[k]:Math.min(hi,x+d)})}}),
       bladEnds:[['hold','ДЕРЖАТЬ'],['restart','СНАЧАЛА'],['down','ВНИЗ']].map(([k,label])=>({label,...sel(B.end===k),click:()=>this.setBladder({end:k})})),
       ladStopSw:this.sw(S.ladStop,()=>this.setState({ladStop:!S.ladStop}),'Стоп после прохода'),
+      ciOn:S.countIn>0,ci:{n:String(S.countIn),odd:S.countIn%2===1,even:S.countIn>0&&S.countIn%2===0,word:['','РАЗ','ДВА','ТРИ','ЧЕТЫРЕ'][S.countIn]||'',head:S.quest&&S.quest.kind==='challenge'?'ИСПЫТАНИЕ НАЧИНАЕТСЯ':'КВЕСТ НАЧИНАЕТСЯ',title:S.quest?S.quest.title:'',dots:[1,2,3,4].map(k=>({c:k<=S.countIn?'var(--accent)':'transparent'}))},
       hasToast:!!S.toast,toast:S.toast||{lines:[]},closeToast:()=>{clearTimeout(this.toastT);this.setState({toast:null})},
       hasQuest:!!S.quest,hasCheck:!!(S.check&&S.quest),qs:{segs:[]},chk:{},profTabs:[],prof:{}
     };
@@ -1214,7 +1230,7 @@ class Component extends DCLogic {
       dTop:mob?'16%':'0',dLeft:mob?'0':'auto',dW:mob?'auto':'min(460px,100%)',
       sTop:mob?'auto':'64px',sRight:mob?'0':'24px',sBottom:mob?'0':'auto',sLeft:mob?'0':'auto',sW:mob?'auto':'420px',sMaxH:mob?'84%':'calc(100vh - 100px)',
       rootH:desk?'100vh':'auto',rootOv:desk?'hidden':'visible',fitW:desk?`calc(100% / ${S.fit})`:'100%',fitTf:desk&&S.fit<1?`scale(${S.fit})`:'none',maxW:desk?`${Math.round(1392/S.fit)}px`:'1392px',
-      pTop:mob?'5%':'64px',pBottom:mob?'0':'24px',pW:mob?'auto':'min(1040px, calc(100vw - 48px))',pPad:mob?'14px':'22px',tabFont:mob?'11px':'13px',pCols:mob?'minmax(0,1fr)':'220px minmax(0,1fr)',statCols:mob?'repeat(2,minmax(0,1fr))':'repeat(4,minmax(0,1fr))',pHalf:mob?'minmax(0,1fr)':'minmax(0,1.3fr) minmax(0,1fr)',
+      logoFont:mob?'15px':'20px',themeMinW:mob?'44px':'64px',pTop:mob?'5%':'64px',pBottom:mob?'0':'24px',pW:mob?'auto':'min(1040px, calc(100vw - 48px))',pPad:mob?'14px':'22px',tabFont:mob?'11px':'13px',pCols:mob?'minmax(0,1fr)':'220px minmax(0,1fr)',statCols:mob?'repeat(2,minmax(0,1fr))':'repeat(4,minmax(0,1fr))',pHalf:mob?'minmax(0,1fr)':'minmax(0,1.3fr) minmax(0,1fr)',
       skCols:mob?'36px minmax(0,1fr) 56px':'52px minmax(0,1fr) 72px 110px 110px',cards3:mob?'minmax(0,1fr)':'repeat(3,minmax(0,1fr))',cards2:mob?'minmax(0,1fr)':'repeat(2,minmax(0,1fr))',achCols:mob?'minmax(0,1fr)':'repeat(3,minmax(0,1fr))',
       qBottom:mob?'calc(84px + env(safe-area-inset-bottom))':'18px',qW:mob?'calc(100% - 24px)':'min(640px, calc(100vw - 48px))',tRight:mob?'12px':'24px',tLeft:mob?'12px':'auto',tBottom:mob?'calc(150px + env(safe-area-inset-bottom))':S.quest?'92px':'24px',tW:mob?'auto':'340px'};
     const bs=String(S.bpm);const activeBeat=S.playing&&S.cur>=0?Math.floor(S.cur/s):-1;
@@ -1232,7 +1248,8 @@ class Component extends DCLogic {
     const orn=S.orn?{x:S.orn.x,y:S.orn.y,n:S.orn.i+1,opts:ORN.map(o=>{const on=(S.steps[S.orn.i]||{}).orn===o[0];return{tag:o[1],label:o[2],bg:on?'var(--ink)':'transparent',fg:on?'var(--surface)':'var(--ink)',pick:()=>this.setState(st=>({steps:st.steps.map((x,j)=>j===st.orn.i?{...x,orn:o[0],state:x.state==='r'&&o[0]!=='none'?'n':x.state}:x),orn:null}))}})}:null;
     return {
       rootRef:this.rootRef,frameRef:this.frameRef,fitRef:this.fitRef,notaRef:this.notaRef,L,scan:(this.props.scanlines??true)&&S.theme==='dark',
-      themeBtns:[['dark','ТЁМНАЯ','☾'],['light','СВЕТЛАЯ','☀']].map(([k,l,ic])=>({label:mob?ic:l,bg:S.theme===k?'var(--ink)':'transparent',fg:S.theme===k?'var(--surface)':'var(--ink)',click:()=>this.setState({theme:k})})),
+      // On a phone the header is tight: one button that flips the theme.
+      themeBtns:mob?[{label:S.theme==='dark'?'☀':'☾',bg:'transparent',fg:'var(--ink)',click:()=>this.setState({theme:S.theme==='dark'?'light':'dark'})}]:[['dark','ТЁМНАЯ'],['light','СВЕТЛАЯ']].map(([k,l])=>({label:l,bg:S.theme===k?'var(--ink)':'transparent',fg:S.theme===k?'var(--surface)':'var(--ink)',click:()=>this.setState({theme:k})})),
       openSound:()=>this.setState({sound:!S.sound,drawer:false,gapPanel:false,ladPanel:false,profile:false}),soundBtnBg:S.sound?'var(--ink)':'var(--surface2)',soundBtnFg:S.sound?'var(--surface)':'var(--ink)',
       openDrawer:()=>this.setState({drawer:true,sound:false,gapPanel:false,ladPanel:false,profile:false}),closeAll:()=>this.setState({drawer:false,sound:false,gapPanel:false,ladPanel:false,profile:false}),anyPanel:S.drawer||S.profile||((S.sound||S.gapPanel||S.ladPanel)&&mob),drawer:S.drawer,sound:S.sound,
       statusLabel:!S.playing?'■ STOP':S.ladder.on&&!S.gap.on&&S.ladInfo&&S.ladInfo.len?'► СТУПЕНЬ '+S.ladInfo.pos+'/'+S.ladInfo.len:S.gap.on&&S.sec&&S.sec.total?(S.sec.gap?'ТИШИНА ':'КЛИК ')+S.sec.n+'/'+S.sec.total:'► PLAY',tHeadBg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accent)':'var(--ink)',tHeadFg:S.playing&&S.gap.on&&S.sec&&S.sec.gap?'var(--accentInk)':'var(--surface)',bpm:S.bpm,bpmLead:'000'.slice(bs.length),bpmMain:bs,playing:S.playing,notPlaying:!S.playing,playGlow:S.playing?'18px':'0px',
